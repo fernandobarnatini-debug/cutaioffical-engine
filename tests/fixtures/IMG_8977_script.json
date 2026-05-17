@@ -1,0 +1,23 @@
+{
+  "kept_spans": [
+    "We all know and love those minimal raver jeans, and they finally dropped the undistressed pair.",
+    "There's still that high quality cotton material, And I love that these have a closed off hem, but let's go build an outfit and see how easy these are to style.",
+    "My cuticles are genuinely fucked, so when buttoning the jeans, I literally got blood on the crotch, which is awesome. But, honestly, other than that, these jeans are so fire.",
+    "They fit the exact same like the other Ravr pair. They just don't have distressing, which is honestly perfect if you're trying to go for, like, a more chill outfit.",
+    "And, honestly, even with the blood on the crotch, I still might wear these today. Fuck it.",
+    "If you're seeing this video, the sale on them is still happening, but they are selling out fast and colorways are almost gone.",
+    "So pick yours up before they're completely sold out because I do not know if they'll be restocking once they're gone, but I'll be giving you the updates on that. And as well, check out my page for a ton more gas fashion finds because I'm trying to put you on the clothes that I would actually wear myself.",
+    "Not no shit quality clothes just to earn a quick commission."
+  ],
+  "removed_segments": [
+    {
+      "removed_text": "They are on sale right now if you wanna they are.",
+      "reason": "false_start"
+    },
+    {
+      "removed_text": "Not no piece of junk just to earn a not no piece of shit. Not no pieces not no",
+      "reason": "fumble"
+    }
+  ],
+  "notes": "Kept 'literally' in 'literally got blood' as it's used for emphasis on actual occurrence. The long pauses throughout suggest multiple takes/segments being stitched. The fumbled ending shows multiple attempts at the final thought—kept the cleanest complete version."
+}

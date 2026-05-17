@@ -1,0 +1,22 @@
+{
+  "kept_spans": [
+    "H and M baggy jorts on a massive spring and summer sale.",
+    "These fit perfectly true to size, literally no belt needed.",
+    "And each colorway comes with this beautiful vintage looking wash effect across the whole pair.",
+    "A perfect baggy fit that sit right below the knee.",
+    "And like I said, in a super affordable price tag for, like, under forty five bucks, making these the best jorts for the spring and summer.",
+    "And if you still see the orange cart, that sale is still happening.",
+    "So pick up your size and colorway before they're all gone because I have no clue if these will be restocking once they're gone."
+  ],
+  "removed_segments": [
+    {
+      "removed_text": "and like I said, in a super affordable price",
+      "reason": "fumble"
+    },
+    {
+      "removed_text": "because I honestly have no clue if these will be selling out once they're gone.",
+      "reason": "retake"
+    }
+  ],
+  "notes": "Removed the fumbled repetition of 'and like I said, in a super affordable price' that occurred mid-sentence. The speaker then chose a clearer ending: 'restocking' instead of 'selling out' after a 1.4s pause, indicating a retake of the final thought."
+}

@@ -1,0 +1,123 @@
+{
+  "kept_spans": [
+    "I didn't know this was possible until Harry's came out with it.",
+    "It's a cooling body wash that actually simulates the feeling of going into a cold plunge.",
+    "It uses eucalyptus and mint, which gives your body, like, this cooling sensation.",
+    "And they also made sure to use natural ingredients, no sulfates or parabens.",
+    "But I am telling you, I don't really know how to explain it. You just kinda have to try it for yourself.",
+    "But I am kinda mad because when I got this dude, it was full price at like fifty bucks.",
+    "But right now, they're running a sale, bro. You can get it for, like, half of that.",
+    "So if you're seeing this while that sale is still going, I would grab it before it ends."
+  ],
+  "removed_segments": [
+    {
+      "removed_text": "Oh my god. Something.",
+      "reason": "meta_talk"
+    },
+    {
+      "removed_text": "Oh my god.",
+      "reason": "meta_talk"
+    },
+    {
+      "removed_text": "I just have to go with that hook?",
+      "reason": "meta_talk"
+    },
+    {
+      "removed_text": "Oh, puppy. Puppy. Puppy. Puppy. Out. Out.",
+      "reason": "meta_talk"
+    },
+    {
+      "removed_text": "Oh my god. It's in my fucking eye, dude.",
+      "reason": "meta_talk"
+    },
+    {
+      "removed_text": "Oh my god. It's like a ten bit there. Oh, fuck.",
+      "reason": "meta_talk"
+    },
+    {
+      "removed_text": "It's a it's a cooling body wash.",
+      "reason": "retake"
+    },
+    {
+      "removed_text": "Alright.",
+      "reason": "filler"
+    },
+    {
+      "removed_text": "It's a cooling body wash that actually simulates the feeling of going into a cold plunge. It's a",
+      "reason": "false_start"
+    },
+    {
+      "removed_text": "it's a cooling bod.",
+      "reason": "fumble"
+    },
+    {
+      "removed_text": "It's a cooling body wash that actually simulates the feeling of, like, of going into a very cold.",
+      "reason": "false_start"
+    },
+    {
+      "removed_text": "It's a cooling bite.",
+      "reason": "fumble"
+    },
+    {
+      "removed_text": "Eucalyptus and which gives your body, like, this cooling sensation.",
+      "reason": "false_start"
+    },
+    {
+      "removed_text": "Alright.",
+      "reason": "filler"
+    },
+    {
+      "removed_text": "it uses eucalyptus and mint, which gives your body, like, this cooling sensation.",
+      "reason": "retake"
+    },
+    {
+      "removed_text": "It gives your body, like",
+      "reason": "false_start"
+    },
+    {
+      "removed_text": "It sure help",
+      "reason": "false_start"
+    },
+    {
+      "removed_text": "to use and",
+      "reason": "false_start"
+    },
+    {
+      "removed_text": "they also use",
+      "reason": "false_start"
+    },
+    {
+      "removed_text": "and they also made sure",
+      "reason": "fumble"
+    },
+    {
+      "removed_text": "you do not. I don't.",
+      "reason": "false_start"
+    },
+    {
+      "removed_text": "I am telling you,",
+      "reason": "fumble"
+    },
+    {
+      "removed_text": "Right now",
+      "reason": "false_start"
+    },
+    {
+      "removed_text": "but right now, you're",
+      "reason": "false_start"
+    },
+    {
+      "removed_text": "but right now, they're running a sale. Do you",
+      "reason": "fumble"
+    },
+    {
+      "removed_text": "you can get it for, like",
+      "reason": "fumble"
+    },
+    {
+      "removed_text": "You're seeing this while that sale is still going, I would grab",
+      "reason": "false_start"
+    }
+  ],
+  "notes": "Heavy meta-talk and multiple retakes throughout, particularly in the middle section where the speaker is working out the eucalyptus/mint description. The final hook is clean. Several instances of the speaker restarting sentences to get better delivery. Kept the speaker's casual tone including 'like', 'dude', 'bro' as those are part of their authentic voice, not meaningless fillers."
+}

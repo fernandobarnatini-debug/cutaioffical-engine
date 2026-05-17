@@ -1,0 +1,56 @@
+{
+  "kept_spans": [
+    "Yesterday was ninety degrees. Today, it's sixty.",
+    "So get ready.",
+    "So we're gonna style this long sleeve t shirt.",
+    "I love that the sleeves don't cuff up and they actually almost flare out.",
+    "Oh, let's go.",
+    "And this shirt is one hundred percent cotton.",
+    "But let's go build an outfit with it and see if it's easy to style.",
+    "As soon as I threw the shirt on, I knew I had to style these with some Yeezys.",
+    "Bro, for some reason, this outfit just takes me straight back to late middle school, early high school.",
+    "It was my dream to have seven fifties, but these were, like, a thousand dollars back in the day.",
+    "And when your boy was fourteen, he didn't even know how to apply for a job.",
+    "But now that I'm twenty four and I got big boy money, you know, we had to splurge a little bit.",
+    "I actually found these for a steal. Not gonna lie.",
+    "But the shirt also, super comfortable.",
+    "It's buttery soft and a little bit thinner, so it's perfect for late spring when it's starting to warm up, but you're not trying to ruin the whole outfit with a jacket or something.",
+    "Like, this shirt is genuinely perfect for just a cloudy day like today.",
+    "I'm five ten, and I picked up an extra small.",
+    "And you don't have to worry about this shirt fitting weird because it runs true to size.",
+    "And there is a sale going on with these, so if you still see the orange card, it is still happening.",
+    "So I would definitely pick yours up because these are super comfortable and honestly really fun to style. I love a good striped shirt like this.",
+    "And as well check out my page for a ton more gas fashion finds because I'm trying to put you on the clothes that I would also wear and not in a five pack of polyester junk that's going straight in the dumpster."
+  ],
+  "removed_segments": [
+    {
+      "removed_text": "so we're gonna style this long",
+      "reason": "fumble"
+    },
+    {
+      "removed_text": "You can actually it's buttery soft",
+      "reason": "false_start"
+    },
+    {
+      "removed_text": "and a little bit thinner, so it's perfect for, like, spring and late",
+      "reason": "false_start"
+    },
+    {
+      "removed_text": "And this shirt is still",
+      "reason": "false_start"
+    },
+    {
+      "removed_text": "and you don't have to worry about this shirt fitting weird because",
+      "reason": "fumble"
+    },
+    {
+      "removed_text": "And as well, check out my page for a ton more gas fashion finds because I'm trying",
+      "reason": "false_start"
+    },
+    {
+      "removed_text": "and as well, check out my page for a ton more honest fashion.",
+      "reason": "false_start"
+    }
+  ],
+  "notes": "The speaker stuttered 'so we're gonna style this long' before completing the sentence. There were multiple retakes on the shirt description where the speaker refined the phrasing about thickness and seasonality. The ending CTA was attempted three times with slight variations before settling on the final cleaner version. Kept the height mention as it provides context for the sizing recommendation."
+}

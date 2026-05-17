@@ -1,0 +1,51 @@
+{
+  "kept_spans": [
+    "H and M is finally on TikTok shop?",
+    "Bro, I was low key bummed when they closed the store in my mall because they would randomly have some heat, and this is part of that lineup.",
+    "These shorts are a cotton polyester blend, but that does help keep their price super affordable.",
+    "But let's see how they actually fit on body to see if they're truly worth it.",
+    "Thank god they fit perfectly true to size. Literally no belt needed.",
+    "And they have a super baggy fit that sit perfectly right below the knee.",
+    "And this beautiful vintage looking wash effect across the whole pair.",
+    "Honestly, for, like, less than fifty or sixty bucks, these jorts are totally worth it.",
+    "and they shipped in less than a week, which is a total plus.",
+    "So if you still see that orange card, I do believe the sale is still happening.",
+    "So if you want an affordable pair of baggy jorts that are gonna hold up for the summertime, I would definitely not hesitate.",
+    "And as well, check out my page for a ton more affordable fashion finds because I'm trying to put you on the clothes that I would actually wear myself and not no five pack of polyester bullshit that's going straight in the dumpster."
+  ],
+  "removed_segments": [
+    {
+      "removed_text": "but that does keep help",
+      "reason": "fumble"
+    },
+    {
+      "removed_text": "And they have a super baggy fit that sits perfectly right below and they have excuse me.",
+      "reason": "false_start"
+    },
+    {
+      "removed_text": "And they have a perfectly baggy fit that sit",
+      "reason": "false_start"
+    },
+    {
+      "removed_text": "and they have a super baggy fit that they have a super baggy fit that",
+      "reason": "fumble"
+    },
+    {
+      "removed_text": "So if you",
+      "reason": "false_start"
+    },
+    {
+      "removed_text": "and they shipped in less than three",
+      "reason": "false_start"
+    },
+    {
+      "removed_text": "and they shipped in less than a week, so they're",
+      "reason": "false_start"
+    },
+    {
+      "removed_text": "So if you want a for",
+      "reason": "fumble"
+    }
+  ],
+  "notes": "Multiple retakes around the 'baggy fit' description where speaker repeatedly restarts the same thought. Kept the cleanest final version. Shipping statement had several false starts before landing on the clean version. Small fumbles like 'but that does keep help' removed as speaker immediately corrects to proper phrasing."
+}

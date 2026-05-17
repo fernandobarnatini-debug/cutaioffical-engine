@@ -1,0 +1,54 @@
+{
+  "kept_spans": [
+    "Summer is approaching super quickly, and I'm picking up all the jorts I can while they're technically still on their winter sails.",
+    "Thank god these are a hundred percent cotton because honestly, I didn't look. I just thought they were so sick.",
+    "But let's go style them and see if they actually look good on body.",
+    "Alright. Honestly, I'm a lot more happy with these than I expected to be.",
+    "They are super long and baggy, but that's kind of a plus.",
+    "It just really depends on the day and style I'm trying to go for, but the cutoff effect just looks so sick. It honestly carries the whole outfit.",
+    "And they shipped in three days, which is always a plus.",
+    "On top of that, like I said, they are technically still on their winter sale.",
+    "So if you still see the orange card, that could still be happening.",
+    "But pick your pair up as soon as possible because this is probably the most affordable price they're gonna be all year.",
+    "But as well, check out my page for a ton more affordable fashion finds because I'm trying to put you on the gas clothing that I would actually wear myself and not no five pack of polyester bullshit."
+  ],
+  "removed_segments": [
+    {
+      "removed_text": "Summer is quickly approaching, so I'm picking up all the shorts I can while they're still technically on winter sails.",
+      "reason": "retake"
+    },
+    {
+      "removed_text": "thank god these",
+      "reason": "fumble"
+    },
+    {
+      "removed_text": "but let's go style them and see how good they",
+      "reason": "false_start"
+    },
+    {
+      "removed_text": "Alright. Honestly, I'm a lot more",
+      "reason": "false_start"
+    },
+    {
+      "removed_text": "And they shipped in three days, so you're gonna be able to wear them, Lily.",
+      "reason": "retake"
+    },
+    {
+      "removed_text": "On top of that, they are on a spring",
+      "reason": "false_start"
+    },
+    {
+      "removed_text": "But pick yours up as soon as possible because once that's over, they're gonna be",
+      "reason": "false_start"
+    },
+    {
+      "removed_text": "but pick yours up as soon as possible because this is",
+      "reason": "false_start"
+    },
+    {
+      "removed_text": "the prop",
+      "reason": "fumble"
+    }
+  ],
+  "notes": "The speaker made multiple retakes of key sentences, particularly the opening hook and the shipping callout. Kept the second version of the hook ('jorts' instead of 'shorts', more natural phrasing). Cut a personal aside ('Lily') from the shipping sentence. Multiple false starts in the affordability section were cleaned up to the final complete version."
+}

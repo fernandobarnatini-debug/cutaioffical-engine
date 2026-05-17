@@ -1,0 +1,32 @@
+{
+  "kept_spans": [
+    "This is why I'm returning my maple loafers.",
+    "And, no, it's not because they have all the best features of the Bostons, like that premium suede upper and the genuine leather insole.",
+    "It's not because of how versatile they are with that classy old money looks. You could dress them up or down.",
+    "but the real reason is because I paid a hundred and seventy for these in the stores when on the TikTok shop, they're less than sixty with free shipping.",
+    "I mean, that is a deal I simply can't refuse.",
+    "One thing I will say is definitely go down a size if you do go ahead and get these.",
+    "I wear a size thirteen in sneakers, but a size twelve in these fits me perfect.",
+    "With summer coming up and how popular these are getting though, I wouldn't even worry about the sale ending because these might sell out before it ends.",
+    "So I'll do y'all a favor and leave the link at the bottom of this video."
+  ],
+  "removed_segments": [
+    {
+      "removed_text": "This is why I'm returning my maple loafers.",
+      "reason": "retake"
+    },
+    {
+      "removed_text": "But it's actually because I've made the miss",
+      "reason": "false_start"
+    },
+    {
+      "removed_text": "but the reason is because I paid a",
+      "reason": "false_start"
+    },
+    {
+      "removed_text": "With summer coming up though and how popular these are getting, I'd be quick and grab yours before the sale's over.",
+      "reason": "retake"
+    }
+  ],
+  "notes": "The opening line was repeated verbatim after a 1.9s pause — classic retake, kept the second version. Multiple false starts mid-transcript around the 'real reason' statement — kept the complete final version. Final CTA had two versions: the first urged viewers to be quick before sale ends, the second (after 5.1s pause) reframed it as stock selling out — kept the second as it's more urgent and the speaker clearly reconsidered. All substantive content about features, versatility, pricing, and sizing kept intact."
+}

@@ -1,0 +1,24 @@
+[build-system]
+requires = ["setuptools>=68", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "cutaioffical-engine"
+version = "0.1.0"
+description = "Unified video → clean script → aligned clips pipeline (CleanUp + Clip merged)."
+readme = "README.md"
+requires-python = ">=3.10"
+license = { text = "Proprietary" }
+authors = [{ name = "Fernando Barnatini" }]
+dependencies = [
+  "httpx>=0.27",
+  "python-dotenv>=1.0",
+  "openai>=1.40",
+]
+
+[project.scripts]
+cutaioffical-engine = "cutaioffical_engine.__main__:main"
+
+[tool.setuptools.packages.find]
+include = ["cutaioffical_engine*"]
+exclude = ["tests*"]

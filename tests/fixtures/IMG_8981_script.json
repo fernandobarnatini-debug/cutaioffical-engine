@@ -1,0 +1,28 @@
+{
+  "kept_spans": [
+    "Normally hate camo shit, but this gets an exception.",
+    "Thank God these shorts are a hundred percent cotton because I didn't even look when I bought them. They were just so sick.",
+    "Even though it was kind of an impulsive purchase because these were super affordable, these are totally worth it and let me show you why.",
+    "They got a super nice baggy fit that sit right below the knee.",
+    "And as a skater, scooter rider, I love that these have deep pockets so I can go to the skate park and my phone will not fall out.",
+    "And they fit perfectly true to size even without a belt.",
+    "And because they were under fifty bucks, these are honestly the best shorts I've ever gotten.",
+    "So if the cart is still there, the sale is still happening, and if your size is still in stock, I would totally recommend picking these up because they're super easy to style and honestly so comfortable to wear.",
+    "Making these honestly some of the best jorts to pick up for the summertime coming up."
+  ],
+  "removed_segments": [
+    {
+      "removed_text": "They got a perfect",
+      "reason": "false_start"
+    },
+    {
+      "removed_text": "like,",
+      "reason": "filler"
+    },
+    {
+      "removed_text": "literally",
+      "reason": "filler"
+    }
+  ],
+  "notes": "Removed 'They got a perfect' as a false start before the speaker restarts with 'They got a super nice baggy fit'. Removed 'like,' as a filler before 'under fifty bucks'. Removed 'literally' as meaningless intensifier in 'honestly literally the best shorts'."
+}

@@ -1,0 +1,33 @@
+{
+  "kept_spans": [
+    "I finally found some super fire baggy brown jorts.",
+    "Thank god these are fully cotton.",
+    "And they have this asymmetrical stitching that looks super unique.",
+    "But you're probably thinking these are hard to style, so let me show you how to make an easy outfit.",
+    "I specifically wanted the brown shorts so I could match it with a yellow shirt.",
+    "So we got FA on the tee, breakfast on the belt, and last resorts on the feet.",
+    "And honestly, I would definitely go to the skate park in this outfit.",
+    "And I love that these shorts have deep pockets, you can keep your phone in them and not worry about it falling out at all.",
+    "Not only did these ship in less than three days, but they are on a massive spring summer sale as well. So if you're seeing this video, they're still in stock, but sizes are super limited, and I do not know if they'll be restocking.",
+    "But I will be giving updates if that happens, and as well, check out my page for a ton more gas fashion finds."
+  ],
+  "removed_segments": [
+    {
+      "removed_text": "But these seem like",
+      "reason": "false_start"
+    },
+    {
+      "removed_text": "but you're",
+      "reason": "fumble"
+    },
+    {
+      "removed_text": "Not only did these ship",
+      "reason": "fumble"
+    },
+    {
+      "removed_text": "But I will be giving updates on",
+      "reason": "false_start"
+    }
+  ],
+  "notes": "Long pauses throughout suggest speaker was taking time between thoughts or coordinating visual elements. 'But you're' fumble before restart on 'you're probably thinking'. Two clear fumbles: 'only did these ship' repeated, and 'updates on' abandoned for 'updates if that happens'. Initial false start 'But these seem like' abandoned before completing thought."
+}

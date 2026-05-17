@@ -1,0 +1,73 @@
+{
+  "kept_spans": [
+    "I didn't even know this was possible until Harry's came out with it.",
+    "It's actually a cooling body wash that simulates the same feeling as like a cold plunge.",
+    "And I'm telling you, it's sweet.",
+    "And I don't really know how else to explain it except for you have try it for yourself, but dude, it literally, like, wakes me up more than, an energy drink does.",
+    "And they also made sure to use all natural ingredients. They don't use any sulfates or parabens.",
+    "Right now, they're running a sale, dude. You can get it for way cheaper than that."
+  ],
+  "removed_segments": [
+    {
+      "removed_text": "Alright.",
+      "reason": "filler"
+    },
+    {
+      "removed_text": "I",
+      "reason": "false_start"
+    },
+    {
+      "removed_text": "didn't even know this was oh, okay. Actually, let me open the top.",
+      "reason": "meta_talk"
+    },
+    {
+      "removed_text": "I",
+      "reason": "false_start"
+    },
+    {
+      "removed_text": "It's actually a cooling it's actually a cooling body wash that simulates the same",
+      "reason": "fumble"
+    },
+    {
+      "removed_text": "it's actually a cooling body wash that simulates the same feeling as like a cold plunge.",
+      "reason": "retake"
+    },
+    {
+      "removed_text": "And I'm telling you, dude.",
+      "reason": "false_start"
+    },
+    {
+      "removed_text": "It literally",
+      "reason": "false_start"
+    },
+    {
+      "removed_text": "and I'm telling you oh,",
+      "reason": "false_start"
+    },
+    {
+      "removed_text": "and it",
+      "reason": "false_start"
+    },
+    {
+      "removed_text": "and I'm telling you, it's sweet. And",
+      "reason": "retake"
+    },
+    {
+      "removed_text": "I don't really know",
+      "reason": "fumble"
+    },
+    {
+      "removed_text": "And",
+      "reason": "fumble"
+    },
+    {
+      "removed_text": "and",
+      "reason": "fumble"
+    },
+    {
+      "removed_text": "Right now, you can get it for",
+      "reason": "false_start"
+    }
+  ],
+  "notes": "Multiple retakes of the opening hook and the 'I'm telling you' section. Speaker abandoned the price CTA mid-sentence and restarted with the sale pitch. Kept the stronger, more complete versions throughout."
+}

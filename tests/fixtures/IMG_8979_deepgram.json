@@ -1,0 +1,1987 @@
+{
+  "metadata": {
+    "transaction_key": "deprecated",
+    "request_id": "019e2a0f-63a9-7e90-b87d-af14ffc6e646",
+    "sha256": "bccdca8548f49c1311e9781c436c3e6dd297a38f154361ae49a59461b82b5791",
+    "created": "2026-05-15T05:15:13.611Z",
+    "duration": 150.67268,
+    "channels": 1,
+    "models": [
+      "2187e11a-3532-4498-b076-81fa530bdd49"
+    ],
+    "model_info": {
+      "2187e11a-3532-4498-b076-81fa530bdd49": {
+        "name": "general-nova-3",
+        "version": "2025-07-31.0",
+        "arch": "nova-3"
+      }
+    }
+  },
+  "results": {
+    "channels": [
+      {
+        "alternatives": [
+          {
+            "transcript": "H and M is finally on TikTok shop? Bro, I was low key bummed when they closed the store in my mall because they would randomly have some heat, and this is part of that lineup. These shorts are a cotton polyester blend, but that does keep help but that does help keep their price super affordable. But let's see how they actually fit on body to see if they're truly worth it. Thank god they fit perfectly true to size. Literally no belt needed. And they have a super baggy fit that sits perfectly right below and they have excuse me. And they have a perfectly baggy fit that sit and they have a super baggy fit that they have a super baggy fit that sit perfectly right below the knee. And this beautiful vintage looking wash effect across the whole pair. Honestly, for, like, less than fifty or sixty bucks, these jorts are totally worth it. So if you and they shipped in less than three and they shipped in less than a week, so they're and they shipped in less than a week, which is a total plus. So if you still see that orange card, I do believe the sale is still happening. So if you want a for so if you want an affordable pair of baggy jorts that are gonna hold up for the summertime, I would definitely not hesitate. And as well, check out my page for a ton more affordable fashion finds because I'm trying to put you on the clothes that I would actually wear myself and not no five pack of polyester bullshit that's going straight in the dumpster.",
+            "confidence": 0.99902344,
+            "words": [
+              {
+                "word": "h",
+                "start": 0.0,
+                "end": 0.32,
+                "confidence": 0.87597656,
+                "punctuated_word": "H"
+              },
+              {
+                "word": "and",
+                "start": 0.32,
+                "end": 0.48,
+                "confidence": 0.9970703,
+                "punctuated_word": "and"
+              },
+              {
+                "word": "m",
+                "start": 0.48,
+                "end": 0.64,
+                "confidence": 0.93408203,
+                "punctuated_word": "M"
+              },
+              {
+                "word": "is",
+                "start": 0.64,
+                "end": 0.79999995,
+                "confidence": 1.0,
+                "punctuated_word": "is"
+              },
+              {
+                "word": "finally",
+                "start": 0.79999995,
+                "end": 1.12,
+                "confidence": 1.0,
+                "punctuated_word": "finally"
+              },
+              {
+                "word": "on",
+                "start": 1.12,
+                "end": 1.36,
+                "confidence": 1.0,
+                "punctuated_word": "on"
+              },
+              {
+                "word": "tiktok",
+                "start": 1.36,
+                "end": 1.8399999,
+                "confidence": 0.98095703,
+                "punctuated_word": "TikTok"
+              },
+              {
+                "word": "shop",
+                "start": 1.8399999,
+                "end": 2.56,
+                "confidence": 0.8911133,
+                "punctuated_word": "shop?"
+              },
+              {
+                "word": "bro",
+                "start": 3.36,
+                "end": 3.76,
+                "confidence": 0.9133301,
+                "punctuated_word": "Bro,"
+              },
+              {
+                "word": "i",
+                "start": 3.76,
+                "end": 3.84,
+                "confidence": 1.0,
+                "punctuated_word": "I"
+              },
+              {
+                "word": "was",
+                "start": 3.84,
+                "end": 4.0,
+                "confidence": 1.0,
+                "punctuated_word": "was"
+              },
+              {
+                "word": "low",
+                "start": 4.0,
+                "end": 4.24,
+                "confidence": 0.99609375,
+                "punctuated_word": "low"
+              },
+              {
+                "word": "key",
+                "start": 4.24,
+                "end": 4.4,
+                "confidence": 0.61816406,
+                "punctuated_word": "key"
+              },
+              {
+                "word": "bummed",
+                "start": 4.4,
+                "end": 4.7999997,
+                "confidence": 0.99609375,
+                "punctuated_word": "bummed"
+              },
+              {
+                "word": "when",
+                "start": 4.7999997,
+                "end": 4.96,
+                "confidence": 1.0,
+                "punctuated_word": "when"
+              },
+              {
+                "word": "they",
+                "start": 4.96,
+                "end": 5.12,
+                "confidence": 1.0,
+                "punctuated_word": "they"
+              },
+              {
+                "word": "closed",
+                "start": 5.12,
+                "end": 5.3599997,
+                "confidence": 0.9770508,
+                "punctuated_word": "closed"
+              },
+              {
+                "word": "the",
+                "start": 5.3599997,
+                "end": 5.6,
+                "confidence": 0.99609375,
+                "punctuated_word": "the"
+              },
+              {
+                "word": "store",
+                "start": 5.6,
+                "end": 5.8399997,
+                "confidence": 1.0,
+                "punctuated_word": "store"
+              },
+              {
+                "word": "in",
+                "start": 5.8399997,
+                "end": 6.0,
+                "confidence": 0.9970703,
+                "punctuated_word": "in"
+              },
+              {
+                "word": "my",
+                "start": 6.0,
+                "end": 6.16,
+                "confidence": 1.0,
+                "punctuated_word": "my"
+              },
+              {
+                "word": "mall",
+                "start": 6.16,
+                "end": 6.88,
+                "confidence": 1.0,
+                "punctuated_word": "mall"
+              },
+              {
+                "word": "because",
+                "start": 7.12,
+                "end": 7.44,
+                "confidence": 0.77978516,
+                "punctuated_word": "because"
+              },
+              {
+                "word": "they",
+                "start": 7.44,
+                "end": 7.68,
+                "confidence": 1.0,
+                "punctuated_word": "they"
+              },
+              {
+                "word": "would",
+                "start": 7.68,
+                "end": 7.8399997,
+                "confidence": 0.99902344,
+                "punctuated_word": "would"
+              },
+              {
+                "word": "randomly",
+                "start": 7.8399997,
+                "end": 8.4,
+                "confidence": 0.99902344,
+                "punctuated_word": "randomly"
+              },
+              {
+                "word": "have",
+                "start": 8.4,
+                "end": 8.639999,
+                "confidence": 1.0,
+                "punctuated_word": "have"
+              },
+              {
+                "word": "some",
+                "start": 8.639999,
+                "end": 8.96,
+                "confidence": 1.0,
+                "punctuated_word": "some"
+              },
+              {
+                "word": "heat",
+                "start": 8.96,
+                "end": 9.759999,
+                "confidence": 0.8051758,
+                "punctuated_word": "heat,"
+              },
+              {
+                "word": "and",
+                "start": 11.12,
+                "end": 11.44,
+                "confidence": 1.0,
+                "punctuated_word": "and"
+              },
+              {
+                "word": "this",
+                "start": 11.44,
+                "end": 11.599999,
+                "confidence": 1.0,
+                "punctuated_word": "this"
+              },
+              {
+                "word": "is",
+                "start": 11.599999,
+                "end": 11.759999,
+                "confidence": 0.99902344,
+                "punctuated_word": "is"
+              },
+              {
+                "word": "part",
+                "start": 11.759999,
+                "end": 12.0,
+                "confidence": 1.0,
+                "punctuated_word": "part"
+              },
+              {
+                "word": "of",
+                "start": 12.0,
+                "end": 12.16,
+                "confidence": 1.0,
+                "punctuated_word": "of"
+              },
+              {
+                "word": "that",
+                "start": 12.16,
+                "end": 12.32,
+                "confidence": 0.99902344,
+                "punctuated_word": "that"
+              },
+              {
+                "word": "lineup",
+                "start": 12.32,
+                "end": 12.799999,
+                "confidence": 0.98999023,
+                "punctuated_word": "lineup."
+              },
+              {
+                "word": "these",
+                "start": 42.065,
+                "end": 42.465,
+                "confidence": 0.96240234,
+                "punctuated_word": "These"
+              },
+              {
+                "word": "shorts",
+                "start": 42.465,
+                "end": 42.864998,
+                "confidence": 0.99902344,
+                "punctuated_word": "shorts"
+              },
+              {
+                "word": "are",
+                "start": 42.864998,
+                "end": 43.105,
+                "confidence": 1.0,
+                "punctuated_word": "are"
+              },
+              {
+                "word": "a",
+                "start": 43.105,
+                "end": 43.265,
+                "confidence": 0.99902344,
+                "punctuated_word": "a"
+              },
+              {
+                "word": "cotton",
+                "start": 43.265,
+                "end": 43.505,
+                "confidence": 0.99902344,
+                "punctuated_word": "cotton"
+              },
+              {
+                "word": "polyester",
+                "start": 43.505,
+                "end": 44.145,
+                "confidence": 0.9592285,
+                "punctuated_word": "polyester"
+              },
+              {
+                "word": "blend",
+                "start": 44.145,
+                "end": 44.945,
+                "confidence": 0.94433594,
+                "punctuated_word": "blend,"
+              },
+              {
+                "word": "but",
+                "start": 47.025,
+                "end": 47.265,
+                "confidence": 1.0,
+                "punctuated_word": "but"
+              },
+              {
+                "word": "that",
+                "start": 47.265,
+                "end": 47.505,
+                "confidence": 1.0,
+                "punctuated_word": "that"
+              },
+              {
+                "word": "does",
+                "start": 47.505,
+                "end": 47.745,
+                "confidence": 1.0,
+                "punctuated_word": "does"
+              },
+              {
+                "word": "keep",
+                "start": 47.745,
+                "end": 47.985,
+                "confidence": 0.99316406,
+                "punctuated_word": "keep"
+              },
+              {
+                "word": "help",
+                "start": 47.985,
+                "end": 48.305,
+                "confidence": 0.93115234,
+                "punctuated_word": "help"
+              },
+              {
+                "word": "but",
+                "start": 48.305,
+                "end": 49.105,
+                "confidence": 0.70410156,
+                "punctuated_word": "but"
+              },
+              {
+                "word": "that",
+                "start": 49.105,
+                "end": 49.345,
+                "confidence": 1.0,
+                "punctuated_word": "that"
+              },
+              {
+                "word": "does",
+                "start": 49.345,
+                "end": 49.585,
+                "confidence": 1.0,
+                "punctuated_word": "does"
+              },
+              {
+                "word": "help",
+                "start": 49.585,
+                "end": 49.825,
+                "confidence": 0.9970703,
+                "punctuated_word": "help"
+              },
+              {
+                "word": "keep",
+                "start": 49.825,
+                "end": 50.065,
+                "confidence": 0.9980469,
+                "punctuated_word": "keep"
+              },
+              {
+                "word": "their",
+                "start": 50.065,
+                "end": 50.305,
+                "confidence": 0.99902344,
+                "punctuated_word": "their"
+              },
+              {
+                "word": "price",
+                "start": 50.305,
+                "end": 50.625,
+                "confidence": 0.9980469,
+                "punctuated_word": "price"
+              },
+              {
+                "word": "super",
+                "start": 50.625,
+                "end": 51.025,
+                "confidence": 1.0,
+                "punctuated_word": "super"
+              },
+              {
+                "word": "affordable",
+                "start": 51.025,
+                "end": 51.585,
+                "confidence": 0.89404297,
+                "punctuated_word": "affordable."
+              },
+              {
+                "word": "but",
+                "start": 53.98,
+                "end": 54.22,
+                "confidence": 1.0,
+                "punctuated_word": "But"
+              },
+              {
+                "word": "let's",
+                "start": 54.22,
+                "end": 54.54,
+                "confidence": 1.0,
+                "punctuated_word": "let's"
+              },
+              {
+                "word": "see",
+                "start": 54.54,
+                "end": 54.62,
+                "confidence": 1.0,
+                "punctuated_word": "see"
+              },
+              {
+                "word": "how",
+                "start": 54.62,
+                "end": 54.78,
+                "confidence": 1.0,
+                "punctuated_word": "how"
+              },
+              {
+                "word": "they",
+                "start": 54.78,
+                "end": 55.02,
+                "confidence": 1.0,
+                "punctuated_word": "they"
+              },
+              {
+                "word": "actually",
+                "start": 55.02,
+                "end": 55.26,
+                "confidence": 0.99902344,
+                "punctuated_word": "actually"
+              },
+              {
+                "word": "fit",
+                "start": 55.26,
+                "end": 55.5,
+                "confidence": 1.0,
+                "punctuated_word": "fit"
+              },
+              {
+                "word": "on",
+                "start": 55.5,
+                "end": 55.739998,
+                "confidence": 0.99316406,
+                "punctuated_word": "on"
+              },
+              {
+                "word": "body",
+                "start": 55.739998,
+                "end": 56.06,
+                "confidence": 0.9873047,
+                "punctuated_word": "body"
+              },
+              {
+                "word": "to",
+                "start": 56.06,
+                "end": 56.22,
+                "confidence": 1.0,
+                "punctuated_word": "to"
+              },
+              {
+                "word": "see",
+                "start": 56.22,
+                "end": 56.38,
+                "confidence": 1.0,
+                "punctuated_word": "see"
+              },
+              {
+                "word": "if",
+                "start": 56.38,
+                "end": 56.54,
+                "confidence": 1.0,
+                "punctuated_word": "if"
+              },
+              {
+                "word": "they're",
+                "start": 56.54,
+                "end": 56.78,
+                "confidence": 1.0,
+                "punctuated_word": "they're"
+              },
+              {
+                "word": "truly",
+                "start": 56.78,
+                "end": 57.1,
+                "confidence": 1.0,
+                "punctuated_word": "truly"
+              },
+              {
+                "word": "worth",
+                "start": 57.1,
+                "end": 57.42,
+                "confidence": 1.0,
+                "punctuated_word": "worth"
+              },
+              {
+                "word": "it",
+                "start": 57.42,
+                "end": 57.66,
+                "confidence": 1.0,
+                "punctuated_word": "it."
+              },
+              {
+                "word": "thank",
+                "start": 68.935,
+                "end": 69.255,
+                "confidence": 0.9873047,
+                "punctuated_word": "Thank"
+              },
+              {
+                "word": "god",
+                "start": 69.255,
+                "end": 69.415,
+                "confidence": 0.7416992,
+                "punctuated_word": "god"
+              },
+              {
+                "word": "they",
+                "start": 69.415,
+                "end": 69.655,
+                "confidence": 0.85498047,
+                "punctuated_word": "they"
+              },
+              {
+                "word": "fit",
+                "start": 69.655,
+                "end": 69.895,
+                "confidence": 1.0,
+                "punctuated_word": "fit"
+              },
+              {
+                "word": "perfectly",
+                "start": 69.895,
+                "end": 70.295,
+                "confidence": 1.0,
+                "punctuated_word": "perfectly"
+              },
+              {
+                "word": "true",
+                "start": 70.295,
+                "end": 70.535,
+                "confidence": 0.97314453,
+                "punctuated_word": "true"
+              },
+              {
+                "word": "to",
+                "start": 70.535,
+                "end": 70.695,
+                "confidence": 1.0,
+                "punctuated_word": "to"
+              },
+              {
+                "word": "size",
+                "start": 70.695,
+                "end": 71.175,
+                "confidence": 0.8623047,
+                "punctuated_word": "size."
+              },
+              {
+                "word": "literally",
+                "start": 71.175,
+                "end": 71.415,
+                "confidence": 1.0,
+                "punctuated_word": "Literally"
+              },
+              {
+                "word": "no",
+                "start": 71.415,
+                "end": 71.735,
+                "confidence": 0.55810547,
+                "punctuated_word": "no"
+              },
+              {
+                "word": "belt",
+                "start": 71.735,
+                "end": 72.055,
+                "confidence": 1.0,
+                "punctuated_word": "belt"
+              },
+              {
+                "word": "needed",
+                "start": 72.055,
+                "end": 72.775,
+                "confidence": 0.9111328,
+                "punctuated_word": "needed."
+              },
+              {
+                "word": "and",
+                "start": 74.295,
+                "end": 74.455,
+                "confidence": 1.0,
+                "punctuated_word": "And"
+              },
+              {
+                "word": "they",
+                "start": 74.455,
+                "end": 74.615,
+                "confidence": 1.0,
+                "punctuated_word": "they"
+              },
+              {
+                "word": "have",
+                "start": 74.615,
+                "end": 74.775,
+                "confidence": 1.0,
+                "punctuated_word": "have"
+              },
+              {
+                "word": "a",
+                "start": 74.775,
+                "end": 74.935,
+                "confidence": 0.99902344,
+                "punctuated_word": "a"
+              },
+              {
+                "word": "super",
+                "start": 74.935,
+                "end": 75.255,
+                "confidence": 1.0,
+                "punctuated_word": "super"
+              },
+              {
+                "word": "baggy",
+                "start": 75.255,
+                "end": 75.655,
+                "confidence": 0.9946289,
+                "punctuated_word": "baggy"
+              },
+              {
+                "word": "fit",
+                "start": 75.655,
+                "end": 75.895,
+                "confidence": 1.0,
+                "punctuated_word": "fit"
+              },
+              {
+                "word": "that",
+                "start": 75.895,
+                "end": 76.055,
+                "confidence": 0.99902344,
+                "punctuated_word": "that"
+              },
+              {
+                "word": "sits",
+                "start": 76.055,
+                "end": 76.375,
+                "confidence": 0.98291016,
+                "punctuated_word": "sits"
+              },
+              {
+                "word": "perfectly",
+                "start": 76.375,
+                "end": 76.854996,
+                "confidence": 1.0,
+                "punctuated_word": "perfectly"
+              },
+              {
+                "word": "right",
+                "start": 76.854996,
+                "end": 77.095,
+                "confidence": 0.69921875,
+                "punctuated_word": "right"
+              },
+              {
+                "word": "below",
+                "start": 77.095,
+                "end": 77.495,
+                "confidence": 0.42749023,
+                "punctuated_word": "below"
+              },
+              {
+                "word": "and",
+                "start": 79.575,
+                "end": 79.895,
+                "confidence": 0.99609375,
+                "punctuated_word": "and"
+              },
+              {
+                "word": "they",
+                "start": 79.895,
+                "end": 80.055,
+                "confidence": 1.0,
+                "punctuated_word": "they"
+              },
+              {
+                "word": "have",
+                "start": 80.055,
+                "end": 80.935,
+                "confidence": 1.0,
+                "punctuated_word": "have"
+              },
+              {
+                "word": "excuse",
+                "start": 81.71,
+                "end": 82.27,
+                "confidence": 0.93408203,
+                "punctuated_word": "excuse"
+              },
+              {
+                "word": "me",
+                "start": 82.27,
+                "end": 82.909996,
+                "confidence": 0.9641113,
+                "punctuated_word": "me."
+              },
+              {
+                "word": "and",
+                "start": 83.15,
+                "end": 83.39,
+                "confidence": 0.99902344,
+                "punctuated_word": "And"
+              },
+              {
+                "word": "they",
+                "start": 83.39,
+                "end": 83.55,
+                "confidence": 1.0,
+                "punctuated_word": "they"
+              },
+              {
+                "word": "have",
+                "start": 83.55,
+                "end": 83.71,
+                "confidence": 0.99902344,
+                "punctuated_word": "have"
+              },
+              {
+                "word": "a",
+                "start": 83.71,
+                "end": 83.87,
+                "confidence": 0.9980469,
+                "punctuated_word": "a"
+              },
+              {
+                "word": "perfectly",
+                "start": 83.87,
+                "end": 84.27,
+                "confidence": 0.9980469,
+                "punctuated_word": "perfectly"
+              },
+              {
+                "word": "baggy",
+                "start": 84.27,
+                "end": 84.67,
+                "confidence": 0.9975586,
+                "punctuated_word": "baggy"
+              },
+              {
+                "word": "fit",
+                "start": 84.67,
+                "end": 84.91,
+                "confidence": 1.0,
+                "punctuated_word": "fit"
+              },
+              {
+                "word": "that",
+                "start": 84.91,
+                "end": 85.07,
+                "confidence": 0.99609375,
+                "punctuated_word": "that"
+              },
+              {
+                "word": "sit",
+                "start": 85.07,
+                "end": 85.71,
+                "confidence": 0.94628906,
+                "punctuated_word": "sit"
+              },
+              {
+                "word": "and",
+                "start": 85.71,
+                "end": 86.11,
+                "confidence": 0.6381836,
+                "punctuated_word": "and"
+              },
+              {
+                "word": "they",
+                "start": 86.11,
+                "end": 86.27,
+                "confidence": 1.0,
+                "punctuated_word": "they"
+              },
+              {
+                "word": "have",
+                "start": 86.27,
+                "end": 86.43,
+                "confidence": 1.0,
+                "punctuated_word": "have"
+              },
+              {
+                "word": "a",
+                "start": 86.43,
+                "end": 86.59,
+                "confidence": 0.9970703,
+                "punctuated_word": "a"
+              },
+              {
+                "word": "super",
+                "start": 86.59,
+                "end": 86.83,
+                "confidence": 1.0,
+                "punctuated_word": "super"
+              },
+              {
+                "word": "baggy",
+                "start": 86.83,
+                "end": 87.23,
+                "confidence": 0.99902344,
+                "punctuated_word": "baggy"
+              },
+              {
+                "word": "fit",
+                "start": 87.23,
+                "end": 87.47,
+                "confidence": 1.0,
+                "punctuated_word": "fit"
+              },
+              {
+                "word": "that",
+                "start": 87.47,
+                "end": 87.71,
+                "confidence": 0.99902344,
+                "punctuated_word": "that"
+              },
+              {
+                "word": "they",
+                "start": 87.71,
+                "end": 88.43,
+                "confidence": 0.62890625,
+                "punctuated_word": "they"
+              },
+              {
+                "word": "have",
+                "start": 89.31,
+                "end": 89.47,
+                "confidence": 1.0,
+                "punctuated_word": "have"
+              },
+              {
+                "word": "a",
+                "start": 89.47,
+                "end": 89.63,
+                "confidence": 0.99609375,
+                "punctuated_word": "a"
+              },
+              {
+                "word": "super",
+                "start": 89.63,
+                "end": 89.87,
+                "confidence": 1.0,
+                "punctuated_word": "super"
+              },
+              {
+                "word": "baggy",
+                "start": 89.87,
+                "end": 90.270004,
+                "confidence": 0.9995117,
+                "punctuated_word": "baggy"
+              },
+              {
+                "word": "fit",
+                "start": 90.270004,
+                "end": 90.51,
+                "confidence": 1.0,
+                "punctuated_word": "fit"
+              },
+              {
+                "word": "that",
+                "start": 90.51,
+                "end": 90.67,
+                "confidence": 1.0,
+                "punctuated_word": "that"
+              },
+              {
+                "word": "sit",
+                "start": 90.67,
+                "end": 90.99,
+                "confidence": 0.99121094,
+                "punctuated_word": "sit"
+              },
+              {
+                "word": "perfectly",
+                "start": 90.99,
+                "end": 91.39,
+                "confidence": 0.99902344,
+                "punctuated_word": "perfectly"
+              },
+              {
+                "word": "right",
+                "start": 91.39,
+                "end": 91.63,
+                "confidence": 1.0,
+                "punctuated_word": "right"
+              },
+              {
+                "word": "below",
+                "start": 91.63,
+                "end": 91.95,
+                "confidence": 1.0,
+                "punctuated_word": "below"
+              },
+              {
+                "word": "the",
+                "start": 91.95,
+                "end": 92.11,
+                "confidence": 1.0,
+                "punctuated_word": "the"
+              },
+              {
+                "word": "knee",
+                "start": 92.11,
+                "end": 92.43,
+                "confidence": 0.6911621,
+                "punctuated_word": "knee."
+              },
+              {
+                "word": "and",
+                "start": 94.595,
+                "end": 94.915,
+                "confidence": 0.41430664,
+                "punctuated_word": "And"
+              },
+              {
+                "word": "this",
+                "start": 94.915,
+                "end": 95.155,
+                "confidence": 1.0,
+                "punctuated_word": "this"
+              },
+              {
+                "word": "beautiful",
+                "start": 95.155,
+                "end": 95.635,
+                "confidence": 1.0,
+                "punctuated_word": "beautiful"
+              },
+              {
+                "word": "vintage",
+                "start": 95.635,
+                "end": 96.035,
+                "confidence": 0.97509766,
+                "punctuated_word": "vintage"
+              },
+              {
+                "word": "looking",
+                "start": 96.035,
+                "end": 96.435,
+                "confidence": 0.9980469,
+                "punctuated_word": "looking"
+              },
+              {
+                "word": "wash",
+                "start": 96.435,
+                "end": 96.835,
+                "confidence": 0.99902344,
+                "punctuated_word": "wash"
+              },
+              {
+                "word": "effect",
+                "start": 96.835,
+                "end": 97.155,
+                "confidence": 0.99609375,
+                "punctuated_word": "effect"
+              },
+              {
+                "word": "across",
+                "start": 97.155,
+                "end": 97.555,
+                "confidence": 1.0,
+                "punctuated_word": "across"
+              },
+              {
+                "word": "the",
+                "start": 97.555,
+                "end": 97.795,
+                "confidence": 1.0,
+                "punctuated_word": "the"
+              },
+              {
+                "word": "whole",
+                "start": 97.795,
+                "end": 98.035,
+                "confidence": 1.0,
+                "punctuated_word": "whole"
+              },
+              {
+                "word": "pair",
+                "start": 98.035,
+                "end": 98.755,
+                "confidence": 0.9951172,
+                "punctuated_word": "pair."
+              },
+              {
+                "word": "honestly",
+                "start": 100.355,
+                "end": 100.995,
+                "confidence": 0.984375,
+                "punctuated_word": "Honestly,"
+              },
+              {
+                "word": "for",
+                "start": 100.995,
+                "end": 101.075,
+                "confidence": 0.83935547,
+                "punctuated_word": "for,"
+              },
+              {
+                "word": "like",
+                "start": 101.075,
+                "end": 101.235,
+                "confidence": 0.9980469,
+                "punctuated_word": "like,"
+              },
+              {
+                "word": "less",
+                "start": 101.235,
+                "end": 101.475,
+                "confidence": 1.0,
+                "punctuated_word": "less"
+              },
+              {
+                "word": "than",
+                "start": 101.475,
+                "end": 101.635,
+                "confidence": 0.99902344,
+                "punctuated_word": "than"
+              },
+              {
+                "word": "fifty",
+                "start": 101.635,
+                "end": 102.035,
+                "confidence": 1.0,
+                "punctuated_word": "fifty"
+              },
+              {
+                "word": "or",
+                "start": 102.035,
+                "end": 102.195,
+                "confidence": 0.9863281,
+                "punctuated_word": "or"
+              },
+              {
+                "word": "sixty",
+                "start": 102.195,
+                "end": 102.515,
+                "confidence": 1.0,
+                "punctuated_word": "sixty"
+              },
+              {
+                "word": "bucks",
+                "start": 102.515,
+                "end": 102.995,
+                "confidence": 0.9926758,
+                "punctuated_word": "bucks,"
+              },
+              {
+                "word": "these",
+                "start": 102.995,
+                "end": 103.155,
+                "confidence": 0.99902344,
+                "punctuated_word": "these"
+              },
+              {
+                "word": "jorts",
+                "start": 103.155,
+                "end": 103.555,
+                "confidence": 0.94140625,
+                "punctuated_word": "jorts"
+              },
+              {
+                "word": "are",
+                "start": 103.555,
+                "end": 103.795,
+                "confidence": 1.0,
+                "punctuated_word": "are"
+              },
+              {
+                "word": "totally",
+                "start": 103.795,
+                "end": 104.115,
+                "confidence": 1.0,
+                "punctuated_word": "totally"
+              },
+              {
+                "word": "worth",
+                "start": 104.115,
+                "end": 104.435,
+                "confidence": 1.0,
+                "punctuated_word": "worth"
+              },
+              {
+                "word": "it",
+                "start": 104.435,
+                "end": 104.675,
+                "confidence": 0.99853516,
+                "punctuated_word": "it."
+              },
+              {
+                "word": "so",
+                "start": 109.75,
+                "end": 109.99,
+                "confidence": 0.98291016,
+                "punctuated_word": "So"
+              },
+              {
+                "word": "if",
+                "start": 109.99,
+                "end": 110.15,
+                "confidence": 0.9770508,
+                "punctuated_word": "if"
+              },
+              {
+                "word": "you",
+                "start": 110.15,
+                "end": 110.31,
+                "confidence": 0.55371094,
+                "punctuated_word": "you"
+              },
+              {
+                "word": "and",
+                "start": 110.63,
+                "end": 110.95,
+                "confidence": 0.99902344,
+                "punctuated_word": "and"
+              },
+              {
+                "word": "they",
+                "start": 110.95,
+                "end": 111.11,
+                "confidence": 1.0,
+                "punctuated_word": "they"
+              },
+              {
+                "word": "shipped",
+                "start": 111.11,
+                "end": 111.35,
+                "confidence": 0.9614258,
+                "punctuated_word": "shipped"
+              },
+              {
+                "word": "in",
+                "start": 111.35,
+                "end": 111.51,
+                "confidence": 0.99902344,
+                "punctuated_word": "in"
+              },
+              {
+                "word": "less",
+                "start": 111.51,
+                "end": 111.75,
+                "confidence": 1.0,
+                "punctuated_word": "less"
+              },
+              {
+                "word": "than",
+                "start": 111.75,
+                "end": 111.909996,
+                "confidence": 1.0,
+                "punctuated_word": "than"
+              },
+              {
+                "word": "three",
+                "start": 111.909996,
+                "end": 112.229996,
+                "confidence": 1.0,
+                "punctuated_word": "three"
+              },
+              {
+                "word": "and",
+                "start": 112.55,
+                "end": 112.79,
+                "confidence": 1.0,
+                "punctuated_word": "and"
+              },
+              {
+                "word": "they",
+                "start": 112.79,
+                "end": 112.87,
+                "confidence": 1.0,
+                "punctuated_word": "they"
+              },
+              {
+                "word": "shipped",
+                "start": 112.87,
+                "end": 113.19,
+                "confidence": 0.9980469,
+                "punctuated_word": "shipped"
+              },
+              {
+                "word": "in",
+                "start": 113.19,
+                "end": 113.35,
+                "confidence": 0.9970703,
+                "punctuated_word": "in"
+              },
+              {
+                "word": "less",
+                "start": 113.35,
+                "end": 113.51,
+                "confidence": 1.0,
+                "punctuated_word": "less"
+              },
+              {
+                "word": "than",
+                "start": 113.51,
+                "end": 113.67,
+                "confidence": 0.99902344,
+                "punctuated_word": "than"
+              },
+              {
+                "word": "a",
+                "start": 113.67,
+                "end": 113.83,
+                "confidence": 0.99121094,
+                "punctuated_word": "a"
+              },
+              {
+                "word": "week",
+                "start": 113.83,
+                "end": 114.229996,
+                "confidence": 0.8222656,
+                "punctuated_word": "week,"
+              },
+              {
+                "word": "so",
+                "start": 114.229996,
+                "end": 114.31,
+                "confidence": 1.0,
+                "punctuated_word": "so"
+              },
+              {
+                "word": "they're",
+                "start": 114.31,
+                "end": 114.95,
+                "confidence": 0.96362305,
+                "punctuated_word": "they're"
+              },
+              {
+                "word": "and",
+                "start": 117.67,
+                "end": 117.83,
+                "confidence": 0.9980469,
+                "punctuated_word": "and"
+              },
+              {
+                "word": "they",
+                "start": 117.83,
+                "end": 117.99,
+                "confidence": 1.0,
+                "punctuated_word": "they"
+              },
+              {
+                "word": "shipped",
+                "start": 117.99,
+                "end": 118.31,
+                "confidence": 0.9980469,
+                "punctuated_word": "shipped"
+              },
+              {
+                "word": "in",
+                "start": 118.31,
+                "end": 118.47,
+                "confidence": 0.9980469,
+                "punctuated_word": "in"
+              },
+              {
+                "word": "less",
+                "start": 118.47,
+                "end": 118.63,
+                "confidence": 0.99902344,
+                "punctuated_word": "less"
+              },
+              {
+                "word": "than",
+                "start": 118.63,
+                "end": 118.79,
+                "confidence": 0.99902344,
+                "punctuated_word": "than"
+              },
+              {
+                "word": "a",
+                "start": 118.79,
+                "end": 118.95,
+                "confidence": 0.9902344,
+                "punctuated_word": "a"
+              },
+              {
+                "word": "week",
+                "start": 118.95,
+                "end": 119.27,
+                "confidence": 0.9645996,
+                "punctuated_word": "week,"
+              },
+              {
+                "word": "which",
+                "start": 119.27,
+                "end": 119.35,
+                "confidence": 1.0,
+                "punctuated_word": "which"
+              },
+              {
+                "word": "is",
+                "start": 119.35,
+                "end": 119.51,
+                "confidence": 1.0,
+                "punctuated_word": "is"
+              },
+              {
+                "word": "a",
+                "start": 119.51,
+                "end": 119.67,
+                "confidence": 1.0,
+                "punctuated_word": "a"
+              },
+              {
+                "word": "total",
+                "start": 119.67,
+                "end": 119.909996,
+                "confidence": 1.0,
+                "punctuated_word": "total"
+              },
+              {
+                "word": "plus",
+                "start": 119.909996,
+                "end": 120.31,
+                "confidence": 0.97802734,
+                "punctuated_word": "plus."
+              },
+              {
+                "word": "so",
+                "start": 123.395,
+                "end": 123.635,
+                "confidence": 0.9970703,
+                "punctuated_word": "So"
+              },
+              {
+                "word": "if",
+                "start": 123.635,
+                "end": 123.795,
+                "confidence": 0.9902344,
+                "punctuated_word": "if"
+              },
+              {
+                "word": "you",
+                "start": 123.795,
+                "end": 123.955,
+                "confidence": 1.0,
+                "punctuated_word": "you"
+              },
+              {
+                "word": "still",
+                "start": 123.955,
+                "end": 124.115,
+                "confidence": 0.99902344,
+                "punctuated_word": "still"
+              },
+              {
+                "word": "see",
+                "start": 124.115,
+                "end": 124.275,
+                "confidence": 1.0,
+                "punctuated_word": "see"
+              },
+              {
+                "word": "that",
+                "start": 124.275,
+                "end": 124.435,
+                "confidence": 0.9970703,
+                "punctuated_word": "that"
+              },
+              {
+                "word": "orange",
+                "start": 124.435,
+                "end": 124.755,
+                "confidence": 0.99902344,
+                "punctuated_word": "orange"
+              },
+              {
+                "word": "card",
+                "start": 124.755,
+                "end": 125.155,
+                "confidence": 0.967041,
+                "punctuated_word": "card,"
+              },
+              {
+                "word": "i",
+                "start": 125.155,
+                "end": 125.235,
+                "confidence": 1.0,
+                "punctuated_word": "I"
+              },
+              {
+                "word": "do",
+                "start": 125.235,
+                "end": 125.395,
+                "confidence": 1.0,
+                "punctuated_word": "do"
+              },
+              {
+                "word": "believe",
+                "start": 125.395,
+                "end": 125.635,
+                "confidence": 1.0,
+                "punctuated_word": "believe"
+              },
+              {
+                "word": "the",
+                "start": 125.635,
+                "end": 125.875,
+                "confidence": 0.97802734,
+                "punctuated_word": "the"
+              },
+              {
+                "word": "sale",
+                "start": 125.875,
+                "end": 126.115,
+                "confidence": 1.0,
+                "punctuated_word": "sale"
+              },
+              {
+                "word": "is",
+                "start": 126.115,
+                "end": 126.354996,
+                "confidence": 1.0,
+                "punctuated_word": "is"
+              },
+              {
+                "word": "still",
+                "start": 126.354996,
+                "end": 126.515,
+                "confidence": 1.0,
+                "punctuated_word": "still"
+              },
+              {
+                "word": "happening",
+                "start": 126.515,
+                "end": 127.235,
+                "confidence": 0.98950195,
+                "punctuated_word": "happening."
+              },
+              {
+                "word": "so",
+                "start": 128.595,
+                "end": 128.83499,
+                "confidence": 0.99902344,
+                "punctuated_word": "So"
+              },
+              {
+                "word": "if",
+                "start": 128.83499,
+                "end": 128.995,
+                "confidence": 0.9980469,
+                "punctuated_word": "if"
+              },
+              {
+                "word": "you",
+                "start": 128.995,
+                "end": 129.075,
+                "confidence": 0.9980469,
+                "punctuated_word": "you"
+              },
+              {
+                "word": "want",
+                "start": 129.075,
+                "end": 129.235,
+                "confidence": 0.6538086,
+                "punctuated_word": "want"
+              },
+              {
+                "word": "a",
+                "start": 129.235,
+                "end": 129.395,
+                "confidence": 0.7163086,
+                "punctuated_word": "a"
+              },
+              {
+                "word": "for",
+                "start": 129.395,
+                "end": 129.555,
+                "confidence": 0.44628906,
+                "punctuated_word": "for"
+              },
+              {
+                "word": "so",
+                "start": 129.875,
+                "end": 130.115,
+                "confidence": 0.89453125,
+                "punctuated_word": "so"
+              },
+              {
+                "word": "if",
+                "start": 130.115,
+                "end": 130.275,
+                "confidence": 0.99902344,
+                "punctuated_word": "if"
+              },
+              {
+                "word": "you",
+                "start": 130.275,
+                "end": 130.435,
+                "confidence": 0.9980469,
+                "punctuated_word": "you"
+              },
+              {
+                "word": "want",
+                "start": 130.435,
+                "end": 130.595,
+                "confidence": 0.9980469,
+                "punctuated_word": "want"
+              },
+              {
+                "word": "an",
+                "start": 130.595,
+                "end": 130.755,
+                "confidence": 0.99902344,
+                "punctuated_word": "an"
+              },
+              {
+                "word": "affordable",
+                "start": 130.755,
+                "end": 131.075,
+                "confidence": 1.0,
+                "punctuated_word": "affordable"
+              },
+              {
+                "word": "pair",
+                "start": 131.075,
+                "end": 131.395,
+                "confidence": 1.0,
+                "punctuated_word": "pair"
+              },
+              {
+                "word": "of",
+                "start": 131.395,
+                "end": 131.555,
+                "confidence": 0.99902344,
+                "punctuated_word": "of"
+              },
+              {
+                "word": "baggy",
+                "start": 131.555,
+                "end": 131.875,
+                "confidence": 0.9902344,
+                "punctuated_word": "baggy"
+              },
+              {
+                "word": "jorts",
+                "start": 131.875,
+                "end": 132.19499,
+                "confidence": 0.88500977,
+                "punctuated_word": "jorts"
+              },
+              {
+                "word": "that",
+                "start": 132.19499,
+                "end": 132.435,
+                "confidence": 0.9560547,
+                "punctuated_word": "that"
+              },
+              {
+                "word": "are",
+                "start": 132.435,
+                "end": 132.595,
+                "confidence": 0.9902344,
+                "punctuated_word": "are"
+              },
+              {
+                "word": "gonna",
+                "start": 132.595,
+                "end": 132.755,
+                "confidence": 0.95947266,
+                "punctuated_word": "gonna"
+              },
+              {
+                "word": "hold",
+                "start": 132.755,
+                "end": 132.995,
+                "confidence": 0.99902344,
+                "punctuated_word": "hold"
+              },
+              {
+                "word": "up",
+                "start": 132.995,
+                "end": 133.155,
+                "confidence": 1.0,
+                "punctuated_word": "up"
+              },
+              {
+                "word": "for",
+                "start": 133.155,
+                "end": 133.315,
+                "confidence": 1.0,
+                "punctuated_word": "for"
+              },
+              {
+                "word": "the",
+                "start": 133.315,
+                "end": 133.475,
+                "confidence": 1.0,
+                "punctuated_word": "the"
+              },
+              {
+                "word": "summertime",
+                "start": 133.475,
+                "end": 134.115,
+                "confidence": 0.9790039,
+                "punctuated_word": "summertime,"
+              },
+              {
+                "word": "i",
+                "start": 134.115,
+                "end": 134.275,
+                "confidence": 1.0,
+                "punctuated_word": "I"
+              },
+              {
+                "word": "would",
+                "start": 134.275,
+                "end": 134.435,
+                "confidence": 1.0,
+                "punctuated_word": "would"
+              },
+              {
+                "word": "definitely",
+                "start": 134.435,
+                "end": 134.675,
+                "confidence": 1.0,
+                "punctuated_word": "definitely"
+              },
+              {
+                "word": "not",
+                "start": 134.675,
+                "end": 134.915,
+                "confidence": 1.0,
+                "punctuated_word": "not"
+              },
+              {
+                "word": "hesitate",
+                "start": 134.915,
+                "end": 135.395,
+                "confidence": 0.9284668,
+                "punctuated_word": "hesitate."
+              },
+              {
+                "word": "and",
+                "start": 136.28,
+                "end": 136.52,
+                "confidence": 0.9970703,
+                "punctuated_word": "And"
+              },
+              {
+                "word": "as",
+                "start": 136.52,
+                "end": 136.68001,
+                "confidence": 0.91748047,
+                "punctuated_word": "as"
+              },
+              {
+                "word": "well",
+                "start": 136.68001,
+                "end": 137.0,
+                "confidence": 0.8466797,
+                "punctuated_word": "well,"
+              },
+              {
+                "word": "check",
+                "start": 137.0,
+                "end": 137.16,
+                "confidence": 1.0,
+                "punctuated_word": "check"
+              },
+              {
+                "word": "out",
+                "start": 137.16,
+                "end": 137.24,
+                "confidence": 0.9614258,
+                "punctuated_word": "out"
+              },
+              {
+                "word": "my",
+                "start": 137.24,
+                "end": 137.4,
+                "confidence": 1.0,
+                "punctuated_word": "my"
+              },
+              {
+                "word": "page",
+                "start": 137.4,
+                "end": 137.64,
+                "confidence": 1.0,
+                "punctuated_word": "page"
+              },
+              {
+                "word": "for",
+                "start": 137.64,
+                "end": 137.88,
+                "confidence": 1.0,
+                "punctuated_word": "for"
+              },
+              {
+                "word": "a",
+                "start": 137.88,
+                "end": 137.96,
+                "confidence": 1.0,
+                "punctuated_word": "a"
+              },
+              {
+                "word": "ton",
+                "start": 137.96,
+                "end": 138.2,
+                "confidence": 1.0,
+                "punctuated_word": "ton"
+              },
+              {
+                "word": "more",
+                "start": 138.2,
+                "end": 138.36,
+                "confidence": 0.99121094,
+                "punctuated_word": "more"
+              },
+              {
+                "word": "affordable",
+                "start": 138.36,
+                "end": 138.84,
+                "confidence": 1.0,
+                "punctuated_word": "affordable"
+              },
+              {
+                "word": "fashion",
+                "start": 138.84,
+                "end": 139.24,
+                "confidence": 1.0,
+                "punctuated_word": "fashion"
+              },
+              {
+                "word": "finds",
+                "start": 139.24,
+                "end": 140.04001,
+                "confidence": 0.9819336,
+                "punctuated_word": "finds"
+              },
+              {
+                "word": "because",
+                "start": 140.44,
+                "end": 140.84,
+                "confidence": 0.5751953,
+                "punctuated_word": "because"
+              },
+              {
+                "word": "i'm",
+                "start": 140.84,
+                "end": 141.0,
+                "confidence": 0.9995117,
+                "punctuated_word": "I'm"
+              },
+              {
+                "word": "trying",
+                "start": 141.0,
+                "end": 141.16,
+                "confidence": 0.97802734,
+                "punctuated_word": "trying"
+              },
+              {
+                "word": "to",
+                "start": 141.16,
+                "end": 141.24,
+                "confidence": 0.99902344,
+                "punctuated_word": "to"
+              },
+              {
+                "word": "put",
+                "start": 141.24,
+                "end": 141.4,
+                "confidence": 1.0,
+                "punctuated_word": "put"
+              },
+              {
+                "word": "you",
+                "start": 141.4,
+                "end": 141.56,
+                "confidence": 0.99902344,
+                "punctuated_word": "you"
+              },
+              {
+                "word": "on",
+                "start": 141.56,
+                "end": 141.72,
+                "confidence": 0.83447266,
+                "punctuated_word": "on"
+              },
+              {
+                "word": "the",
+                "start": 141.72,
+                "end": 141.8,
+                "confidence": 0.5395508,
+                "punctuated_word": "the"
+              },
+              {
+                "word": "clothes",
+                "start": 141.8,
+                "end": 142.04001,
+                "confidence": 0.99902344,
+                "punctuated_word": "clothes"
+              },
+              {
+                "word": "that",
+                "start": 142.04001,
+                "end": 142.28,
+                "confidence": 0.9760742,
+                "punctuated_word": "that"
+              },
+              {
+                "word": "i",
+                "start": 142.28,
+                "end": 142.36,
+                "confidence": 1.0,
+                "punctuated_word": "I"
+              },
+              {
+                "word": "would",
+                "start": 142.36,
+                "end": 142.52,
+                "confidence": 1.0,
+                "punctuated_word": "would"
+              },
+              {
+                "word": "actually",
+                "start": 142.52,
+                "end": 142.76,
+                "confidence": 1.0,
+                "punctuated_word": "actually"
+              },
+              {
+                "word": "wear",
+                "start": 142.76,
+                "end": 143.08,
+                "confidence": 1.0,
+                "punctuated_word": "wear"
+              },
+              {
+                "word": "myself",
+                "start": 143.08,
+                "end": 143.88,
+                "confidence": 1.0,
+                "punctuated_word": "myself"
+              },
+              {
+                "word": "and",
+                "start": 144.28,
+                "end": 144.6,
+                "confidence": 0.8540039,
+                "punctuated_word": "and"
+              },
+              {
+                "word": "not",
+                "start": 144.6,
+                "end": 144.76,
+                "confidence": 0.99902344,
+                "punctuated_word": "not"
+              },
+              {
+                "word": "no",
+                "start": 144.76,
+                "end": 145.0,
+                "confidence": 0.90625,
+                "punctuated_word": "no"
+              },
+              {
+                "word": "five",
+                "start": 145.0,
+                "end": 145.32,
+                "confidence": 1.0,
+                "punctuated_word": "five"
+              },
+              {
+                "word": "pack",
+                "start": 145.32,
+                "end": 145.56,
+                "confidence": 1.0,
+                "punctuated_word": "pack"
+              },
+              {
+                "word": "of",
+                "start": 145.56,
+                "end": 145.72,
+                "confidence": 0.99609375,
+                "punctuated_word": "of"
+              },
+              {
+                "word": "polyester",
+                "start": 145.72,
+                "end": 146.28,
+                "confidence": 0.99560547,
+                "punctuated_word": "polyester"
+              },
+              {
+                "word": "bullshit",
+                "start": 146.28,
+                "end": 146.68001,
+                "confidence": 0.99902344,
+                "punctuated_word": "bullshit"
+              },
+              {
+                "word": "that's",
+                "start": 146.68001,
+                "end": 147.0,
+                "confidence": 0.99902344,
+                "punctuated_word": "that's"
+              },
+              {
+                "word": "going",
+                "start": 147.0,
+                "end": 147.16,
+                "confidence": 0.99902344,
+                "punctuated_word": "going"
+              },
+              {
+                "word": "straight",
+                "start": 147.16,
+                "end": 147.56,
+                "confidence": 1.0,
+                "punctuated_word": "straight"
+              },
+              {
+                "word": "in",
+                "start": 147.56,
+                "end": 147.72,
+                "confidence": 0.9980469,
+                "punctuated_word": "in"
+              },
+              {
+                "word": "the",
+                "start": 147.72,
+                "end": 147.88,
+                "confidence": 0.99902344,
+                "punctuated_word": "the"
+              },
+              {
+                "word": "dumpster",
+                "start": 147.88,
+                "end": 148.28,
+                "confidence": 1.0,
+                "punctuated_word": "dumpster."
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+}
