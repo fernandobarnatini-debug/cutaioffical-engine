@@ -99,6 +99,19 @@ def _build_filter_complex(ranges: list[tuple[float, float]]) -> str:
     return filtergraph
 
 
+def compute_padded_ranges(clip_json: dict[str, Any]) -> list[tuple[float, float]]:
+    """Public: return the (start, end) tuples that render() would actually
+    feed to ffmpeg, including per-range padding. Frontends can use this to
+    compute cut-timeline positions that match the rendered MP4 exactly.
+
+    Returns empty list if clip_json has no valid ranges.
+    """
+    flat = _flatten_ranges(clip_json)
+    if not flat:
+        return []
+    return _padded_ranges(flat)
+
+
 def render(
     video_path: str | Path,
     clip_json: dict[str, Any],

@@ -16,7 +16,7 @@ from .cleanup import (
     run_cleanup_from_deepgram,
 )
 from .clip import align
-from .render import render
+from .render import compute_padded_ranges, render
 from .peaks import generate_peaks
 
 __all__ = [
@@ -25,5 +25,6 @@ __all__ = [
     "run_cleanup_from_deepgram",
     "align",
     "render",
+    "compute_padded_ranges",
     "generate_peaks",
 ]
