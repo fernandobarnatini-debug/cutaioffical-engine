@@ -4,8 +4,8 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "cutaioffical-engine"
-version = "0.1.0"
-description = "Unified video → clean script → aligned clips pipeline (CleanUp + Clip merged)."
+version = "0.2.0"
+description = "Unified video → clean script → aligned clips → rendered cut pipeline (CleanUp + Clip + Render)."
 readme = "README.md"
 requires-python = ">=3.10"
 license = { text = "Proprietary" }
