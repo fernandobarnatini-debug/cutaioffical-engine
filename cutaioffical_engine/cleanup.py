@@ -14,10 +14,12 @@ Public functions:
 from __future__ import annotations
 
 import json
+import logging
 import os
 import re
 import subprocess
 import tempfile
+import time
 from pathlib import Path
 from typing import Callable, Optional
 
@@ -27,6 +29,8 @@ from openai import OpenAI
 
 from .prompts import SCRIPT_SCHEMA, SYSTEM_PROMPT
 from .clip import align
+
+log = logging.getLogger(__name__)
 
 
 DEEPGRAM_URL = "https://api.deepgram.com/v1/listen"
@@ -53,6 +57,7 @@ def extract_audio(video_path: Path, wav_path: Path) -> None:
         "-acodec", "pcm_s16le",
         str(wav_path),
     ]
+    t0 = time.time()
     try:
         # 90s ceiling — audio extraction is fast even on long sources; the
         # timeout exists purely to keep a hung ffmpeg from holding the worker.
@@ -61,6 +66,7 @@ def extract_audio(video_path: Path, wav_path: Path) -> None:
         raise RuntimeError(f"ffmpeg audio extract timed out after {exc.timeout}s") from exc
     if result.returncode != 0:
         raise RuntimeError(f"ffmpeg failed (exit {result.returncode}):\n{result.stderr.strip()}")
+    log.info("extract_audio done in %.1fs", time.time() - t0)
 
 
 def call_deepgram(wav_bytes: bytes, api_key: str) -> dict:
@@ -72,10 +78,12 @@ def call_deepgram(wav_bytes: bytes, api_key: str) -> dict:
         "numerals": "false",
         "filler_words": "true",
     }
+    t0 = time.time()
     with httpx.Client(timeout=HTTP_TIMEOUT) as client:
         r = client.post(DEEPGRAM_URL, headers=headers, params=params, content=wav_bytes)
     if r.status_code >= 400:
         raise RuntimeError(f"Deepgram HTTP {r.status_code}: {r.text[:500]}")
+    log.info("deepgram done in %.1fs", time.time() - t0)
     return r.json()
 
 
@@ -111,6 +119,7 @@ def structure_script(transcript: str, client: OpenAI) -> dict:
         "Raw transcript follows. Edit per the system rules and return the JSON object.\n\n"
         f"---\n{transcript}\n---"
     )
+    t0 = time.time()
     response = client.chat.completions.create(
         model=MODEL,
         max_tokens=8000,
@@ -134,6 +143,7 @@ def structure_script(transcript: str, client: OpenAI) -> dict:
         # OpenAI SDK which is far too long to wait on a stuck request.
         timeout=LLM_TIMEOUT_SECONDS,
     )
+    log.info("sonnet done in %.1fs", time.time() - t0)
     return _parse_json(response.choices[0].message.content)
 
 
@@ -223,5 +233,7 @@ def run_pipeline(video_path: str | Path) -> dict:
     """Full pipeline: cleanup + clip alignment."""
     video_path = Path(video_path)
     result = run_cleanup(video_path)
+    t0 = time.time()
     result["clip"] = align(result["script"], result["deepgram"], video_name=video_path.stem)
+    log.info("align done in %.1fs", time.time() - t0)
     return result
