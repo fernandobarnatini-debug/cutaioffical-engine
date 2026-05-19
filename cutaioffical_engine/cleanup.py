@@ -30,7 +30,14 @@ from .clip import align
 
 
 DEEPGRAM_URL = "https://api.deepgram.com/v1/listen"
-HTTP_TIMEOUT = httpx.Timeout(600.0, connect=30.0)
+# 90s total + 15s connect is the right ceiling for Deepgram nova-3 against
+# speech-typical audio. The previous 600s default let a single hung socket
+# pin the worker for 10 minutes with no diagnostic trace.
+HTTP_TIMEOUT = httpx.Timeout(90.0, connect=15.0)
+# Sonnet call ceiling. Sonnet 4.5 normally returns in 10–25s for our prompts;
+# 120s leaves enough slack for a slow day at Anthropic without letting a
+# stuck request hang the pipeline.
+LLM_TIMEOUT_SECONDS = 120.0
 
 OPENROUTER_BASE_URL = "https://openrouter.ai/api/v1"
 MODEL = "anthropic/claude-sonnet-4.5"
@@ -46,7 +53,12 @@ def extract_audio(video_path: Path, wav_path: Path) -> None:
         "-acodec", "pcm_s16le",
         str(wav_path),
     ]
-    result = subprocess.run(cmd, capture_output=True, text=True)
+    try:
+        # 90s ceiling — audio extraction is fast even on long sources; the
+        # timeout exists purely to keep a hung ffmpeg from holding the worker.
+        result = subprocess.run(cmd, capture_output=True, text=True, timeout=90)
+    except subprocess.TimeoutExpired as exc:
+        raise RuntimeError(f"ffmpeg audio extract timed out after {exc.timeout}s") from exc
     if result.returncode != 0:
         raise RuntimeError(f"ffmpeg failed (exit {result.returncode}):\n{result.stderr.strip()}")
 
@@ -118,6 +130,9 @@ def structure_script(transcript: str, client: OpenAI) -> dict:
             "HTTP-Referer": "https://github.com/local/cleanup",
             "X-Title": "CleanUp",
         },
+        # Hard ceiling on the LLM call — Sonnet defaults to ~10min via the
+        # OpenAI SDK which is far too long to wait on a stuck request.
+        timeout=LLM_TIMEOUT_SECONDS,
     )
     return _parse_json(response.choices[0].message.content)
 

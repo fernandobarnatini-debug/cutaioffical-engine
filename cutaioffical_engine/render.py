@@ -142,7 +142,10 @@ def render(
         "-map", "[vout]",
         "-map", "[aout]",
         "-c:v", "libx264",
-        "-preset", "fast",
+        # ultrafast gives 40–60% faster encode for ~25% larger files. For a
+        # delivery preview that ships through Supabase Storage in seconds either
+        # way, the tradeoff is correct. CRF 20 still pins quality.
+        "-preset", "ultrafast",
         "-crf", "20",
         # Force 8-bit yuv420p output. iPhone HDR / Dolby Vision sources land as
         # 10-bit (yuv420p10le) → libx264 silently picks the High 10 profile,
@@ -154,7 +157,13 @@ def render(
         "-b:a", "192k",
         str(output_path),
     ]
-    result = subprocess.run(cmd, capture_output=True, text=True)
+    try:
+        # Hard ceiling so a bad input / stuck encoder can't hang the worker.
+        # 4 min covers a generous render of a multi-minute source on a
+        # shared-cpu Fly machine. Anything longer is pathological.
+        result = subprocess.run(cmd, capture_output=True, text=True, timeout=240)
+    except subprocess.TimeoutExpired as exc:
+        raise RuntimeError(f"ffmpeg render timed out after {exc.timeout}s") from exc
     if result.returncode != 0:
         tail = (result.stderr or "")[-1500:]
         raise RuntimeError(f"ffmpeg render failed (exit {result.returncode}):\n{tail}")

@@ -68,7 +68,12 @@ def generate_peaks(
         "-f", "f32le",          # 32-bit little-endian floats
         "-",                    # stdout
     ]
-    result = subprocess.run(cmd, capture_output=True)
+    try:
+        # Audio-only decode at 8kHz mono — should complete in seconds even on
+        # multi-minute sources. 60s ceiling guards against hung subprocesses.
+        result = subprocess.run(cmd, capture_output=True, timeout=60)
+    except subprocess.TimeoutExpired as exc:
+        raise RuntimeError(f"ffmpeg peaks decode timed out after {exc.timeout}s") from exc
     if result.returncode != 0:
         tail = (result.stderr or b"").decode("utf-8", errors="replace")[-1500:]
         raise RuntimeError(f"ffmpeg peaks decode failed (exit {result.returncode}):\n{tail}")
