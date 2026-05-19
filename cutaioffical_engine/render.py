@@ -144,6 +144,12 @@ def render(
         "-c:v", "libx264",
         "-preset", "fast",
         "-crf", "20",
+        # Force 8-bit yuv420p output. iPhone HDR / Dolby Vision sources land as
+        # 10-bit (yuv420p10le) → libx264 silently picks the High 10 profile,
+        # which no browser can decode in HTML5 <video> (Chrome, Safari, Firefox
+        # all reject it with NotSupportedError). High 8-bit is universally
+        # playable.
+        "-pix_fmt", "yuv420p",
         "-c:a", "aac",
         "-b:a", "192k",
         str(output_path),
