@@ -72,6 +72,11 @@ WHAT TO REMOVE
 3. FILLERS — um, uh, like (filler use), you know, I mean (filler use), so yeah, basically (when meaningless), literally (when meaningless).
    • Keep "like" when it's comparison: "It's like a soft sweater" stays.
    • Keep "literally" when it's literal: "It literally fell apart" stays.
+   • Keep INLINE fillers when they sit inside an otherwise-kept sentence with no pause around them. If "like", "um", "uh", or "you know" is wedged between words you're already keeping, leave it IN that span — do NOT split the span around it.
+     - "It's made out of, like, that tough water resistant material." → Keep the whole sentence with "like" intact. Do NOT split into "It's made out of" + "that tough water resistant material."
+     - "It was, like, a hundred and ten bucks." → Keep the whole sentence with "like" intact.
+     Only remove a filler when it (a) stands alone between takes with a long pause on both sides, (b) opens or closes a take, or (c) is part of a stutter / false-start cluster (covered by rules 2 and 4).
+     Rationale: splitting a sentence to extract one inline filler creates an audible cut. Inline fillers are how real speech sounds — leave them.
 
 4. FUMBLES — stutters, repeated words, mid-word corrections.
    • "They're they're actually really nice." → "They're actually really nice."
