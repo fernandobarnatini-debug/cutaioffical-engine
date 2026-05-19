@@ -64,6 +64,7 @@ WHAT TO REMOVE
 1. RETAKES — when the speaker says something, then says the same idea again, better. Keep the better version. Cut the worse one.
    • "I think the main reason is cost. ⟨pause 0.9s⟩ Actually, the main reason is convenience." → Keep only "The main reason is convenience."
    • "These are amazing. I mean, I love these so much." → Keep only "I love these so much."
+   • BEFORE removing what looks like a retake, check INTENTIONAL STRUCTURAL REPETITION below. "Not one, not two, not three" and "one, two, three, four, five" are setups, not failed attempts.
 
 2. FALSE STARTS — sentences abandoned mid-thought and restarted, OR opener attempts restated after a pause.
    • "It's about — it's really about — okay, it's about authenticity." → Keep only "It's about authenticity."
@@ -100,6 +101,56 @@ WHAT TO KEEP
 - Lists and parallel structure: "It's soft, it's warm, it's affordable" — keep all.
 - Contrast: "I thought it would be cheap. ⟨pause 0.4s⟩ It's actually high quality." — NOT a retake, keep both.
 - The hook (first 1–2 sentences) unless it's clearly a false start.
+
+═══════════════════════════════════════════════════════
+INTENTIONAL STRUCTURAL REPETITION
+═══════════════════════════════════════════════════════
+
+Short-form video scripts (especially TikTok Shop / product reveals) use STRUCTURAL repetition as the HOOK. These patterns LOOK superficially like retakes — they are NOT. Recognize them and KEEP THE ENTIRE SEQUENCE.
+
+1. NUMBERED COUNT → REVEAL
+   • "One, two, three, four, five. Five fitted polos for this price..."
+   • "One, two, three of these for under twenty bucks."
+   The numeric count IS the hook. The reveal explains what was counted. Keep every number.
+
+2. NEGATION CHAIN → REVEAL
+   • "Not one, not two, not three, but four ___."
+   • "Don't buy this one or this one, and definitely not this one. Because..."
+   • "Not because A, not because B, but because C."
+   Each negation is intentional setup. The reveal explains the alternative. Keep every item.
+
+3. ESCALATION CHAIN → REVERSAL
+   • "This is a scam, this is an even bigger scam, this is the biggest scam." (sets up the real product)
+   • "X is bad. Y is worse. Z is the worst." (sets up the recommendation)
+   Each iteration intensifies. The structure dramatizes the reversal that follows. Keep every step.
+
+4. A/B / VERSUS COMPARISON
+   • "Old Haas beater versus the new Haas beater."
+   • "This one vs this one."
+   Direct comparison frames the analysis. Keep both sides.
+
+5. PURE STACKED ESCALATION (no reveal needed)
+   • "It's not just affordable — it's cheap. It's not just cheap — it's basically free."
+   • "X is good. Y is better. Z is the best."
+   Each iteration intensifies the previous. The structure IS the message. Keep all.
+
+6. NUMBERED ENUMERATION (each item is a beat)
+   • "First ___. Second ___. Third ___."
+   • "I have three of these. One is ___, one is ___, one is ___."
+   Each numbered beat is deliberate. Keep all.
+
+HOW TO DISTINGUISH FROM RETAKES
+
+  • Retake: speaker reformulates the SAME idea, often hesitantly. Long pauses between attempts (>1.5s). Removing earlier versions loses no meaning. The ATTEMPTS are at the same target.
+  • Structural repetition: each iteration is COMPLETE, grammatically parallel, no long pauses between items, and the sequence builds to a payoff / reveal / reversal. Removing any item breaks the rhetorical structure.
+
+DEFAULT BIAS
+
+When a passage shows parallel structure — sequential numbers, "not X, not Y, not Z," escalating adjectives ("bad/worse/worst"), or versus framing — default to KEEPING the whole sequence unless there is CLEAR evidence of abandonment: long pauses between iterations, fumbled reformulation of the SAME item, or explicit restart language ("okay let me try that again").
+
+A series of numbers is NOT four false attempts before getting to "five." It IS the hook.
+The first three items of a negation chain are NOT three failed attempts at the fourth. They ARE the setup.
+"This is a scam, this is a bigger scam, this is the biggest scam" is NOT three retakes — it is escalation that EXISTS to dramatize the reveal.
 
 ═══════════════════════════════════════════════════════
 DECISION RULES FOR HARD CASES
