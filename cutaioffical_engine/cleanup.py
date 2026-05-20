@@ -29,6 +29,7 @@ from openai import OpenAI
 
 from .prompts import SCRIPT_SCHEMA, SYSTEM_PROMPT
 from .clip import align
+from .refine import refine_ranges
 
 log = logging.getLogger(__name__)
 
@@ -235,10 +236,19 @@ def run_cleanup(video_path: str | Path) -> dict:
 
 
 def run_pipeline(video_path: str | Path) -> dict:
-    """Full pipeline: cleanup + clip alignment."""
+    """Full pipeline: cleanup + clip alignment + Block-3 word-boundary refinement."""
     video_path = Path(video_path)
     result = run_cleanup(video_path)
     t0 = time.time()
     result["clip"] = align(result["script"], result["deepgram"], video_name=video_path.stem)
     log.info("align done in %.1fs", time.time() - t0)
+
+    # Block 3: snap each range's start/end to sub-50ms-accurate word boundaries
+    # via wav2vec2 + CTC forced alignment. Eliminates the Deepgram word-boundary
+    # imprecision that the render-time padding constants (now near-zero) used to
+    # compensate for. See refine.py and render.py for the matching padding drop.
+    t0 = time.time()
+    dg_words = result["deepgram"]["results"]["channels"][0]["alternatives"][0]["words"]
+    result["clip"] = refine_ranges(result["clip"], video_path, dg_words)
+    log.info("refine done in %.1fs", time.time() - t0)
     return result

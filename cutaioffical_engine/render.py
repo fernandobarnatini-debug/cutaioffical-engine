@@ -16,10 +16,18 @@ import subprocess
 from pathlib import Path
 from typing import Any
 
-# Padding constants — same as the working ~/Clip/pipeline.py.
-HEAD_TARGET_MS = 60
-TAIL_TARGET_MS = 120
-PAD_FLOOR_MS = 25
+# Padding constants — dropped to near-zero after Block 3 (refine.py) started
+# producing sub-50ms-accurate word boundaries via wav2vec2 + CTC.
+#   HEAD_TARGET_MS = 0  — word starts are now precise; no compensation needed.
+#   TAIL_TARGET_MS = 30 — physically defensible: stop consonants (p, t, k, d, g)
+#                        have a brief release burst (~30ms) after the model's
+#                        reported word_end. 30ms catches that without adding
+#                        audible dead air. NOT a tuned per-video knob — this is
+#                        the natural duration of a consonant release.
+#   PAD_FLOOR_MS = 0    — no minimum padding needed when boundaries are precise.
+HEAD_TARGET_MS = 0
+TAIL_TARGET_MS = 30
+PAD_FLOOR_MS = 0
 
 
 def _flatten_ranges(clip_json: dict[str, Any]) -> list[dict[str, Any]]:
