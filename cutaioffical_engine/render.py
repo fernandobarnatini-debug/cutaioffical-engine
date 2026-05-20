@@ -16,18 +16,21 @@ import subprocess
 from pathlib import Path
 from typing import Any
 
-# Padding constants — dropped to near-zero after Block 3 (refine.py) started
-# producing sub-50ms-accurate word boundaries via wav2vec2 + CTC.
-#   HEAD_TARGET_MS = 0  — word starts are now precise; no compensation needed
-#                        for sentence-flow cuts.
-#   TAIL_TARGET_MS = 30 — physically defensible: stop consonants (p, t, k, d, g)
-#                        have a brief release burst (~30ms) after the model's
-#                        reported word_end. 30ms catches that without adding
-#                        audible dead air. NOT a tuned per-video knob — this is
-#                        the natural duration of a consonant release.
-#   PAD_FLOOR_MS = 0    — no minimum padding needed when boundaries are precise.
+# Padding constants — calibrated for wav2vec2-precise word boundaries.
+#   HEAD_TARGET_MS = 0   — sentence-flow word starts are surrounded by rhythm
+#                          context; no pre-onset compensation needed.
+#   TAIL_TARGET_MS = 120 — voiced consonants and final vowels decay ~80–150ms
+#                          past wav2vec2's reported word_end (the model
+#                          predicts the phoneme core, not the natural release).
+#                          120ms captures the decay for sentence ends and
+#                          inter-sub-range cuts without dragging silence (the
+#                          post_silence_ms cap limits to actually-available
+#                          quiet). NOT per-video tuning — this is the natural
+#                          decay window for English voiced sounds.
+#   PAD_FLOOR_MS = 0     — no minimum padding needed when boundaries are
+#                          precise; quiet ranges stay quiet.
 HEAD_TARGET_MS = 0
-TAIL_TARGET_MS = 30
+TAIL_TARGET_MS = 120
 PAD_FLOOR_MS = 0
 
 # Short-clip head/tail padding — for standalone utterances (counts, negation
