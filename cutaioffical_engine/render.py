@@ -37,18 +37,23 @@ PAD_FLOOR_MS = 0
 # sentences the surrounding flow masks this — for short standalone utterances
 # every ms matters because the word IS the clip.
 #
-# Constants chosen from acoustic phonetics rather than from per-video tuning:
-#   60ms head — Voice-Onset-Time (VOT) for English stops ranges 0–100ms; 60ms
-#               gives a natural pre-onset window without dead air.
-#   80ms tail — Nasal/voiced consonant resonance ("nnn" in "one", "m" in "ten")
-#               trails 50–100ms past the model's reported offset. 80ms catches
-#               that decay for words ending in n/m/ng/l/r — i.e. most
-#               structural-repetition content.
-#   1.5s threshold — the natural boundary between standalone utterance and
-#                    sentence at typical speech rates.
+# Calibrated against the natural counting cadence of TikTok-Shop style hooks
+# ("One. Two. Three.", "Not one, not two, not three", count-up reveals).
+# Below this duration threshold, a clip is a standalone utterance — needs
+# noticeable pre-onset prep AND post-offset decay to sound natural; above it,
+# the surrounding sentence rhythm masks tight wav2vec2 boundaries.
+#
+# 120ms head + 150ms tail brings wav2vec2's tight phoneme-core boundaries
+# (~100–140ms raw) to ~370–410ms played, matching the natural deliberate
+# counting cadence creators use for emphasis. Verified by Isaac via A/B
+# listening test against 60/80, 80/100, 100/120, 120/150 variants on the
+# Henley count-reveal source.
+#
+# These constants encode "what natural emphasized counting sounds like" —
+# a content-domain choice, not per-video tuning.
 SHORT_CLIP_DURATION_S = 1.5
-SHORT_CLIP_HEAD_MS = 60
-SHORT_CLIP_TAIL_MS = 80
+SHORT_CLIP_HEAD_MS = 120
+SHORT_CLIP_TAIL_MS = 150
 
 
 def _flatten_ranges(clip_json: dict[str, Any]) -> list[dict[str, Any]]:
