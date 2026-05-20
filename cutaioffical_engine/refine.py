@@ -1,23 +1,36 @@
-"""Block 3 — precise word-boundary refinement via wav2vec2 + CTC forced alignment.
+"""Block 3 — precise word-boundary refinement + within-range deadspace removal.
 
-Takes the output of align() (clip_json with imprecise Deepgram word timestamps
-on each range) and re-snaps every range's start/end to sub-50ms-accurate
-positions by forced-aligning the source audio against the Deepgram word list.
+Two passes per clip:
 
-The forced-alignment is over the FULL Deepgram word sequence (one pass per
-clip). Each range then looks up its head/tail words via start_word_idx /
-end_word_idx (produced by clip.make_range) and replaces start/end with the
-refined values.
+1) wav2vec2 + CTC forced alignment over the full Deepgram word sequence. Gives
+   us sub-50ms-accurate per-word (start, end) timings.
+2) For each kept range, walk consecutive word pairs and split the range at any
+   gap ≥ INTERNAL_SILENCE_SPLIT_S between wav2vec2-precise word boundaries.
+   Each sub-range is then assigned wav2vec2 boundaries on both edges.
 
-Tuning-free: wav2vec2-base-960h is a fixed model. No thresholds, no per-video
-parameters. Boundaries are determined by the model's phoneme onsets/offsets.
+The split uses wav2vec2 word gaps (NOT Deepgram word gaps, NOT ffmpeg
+silencedetect):
+
+- Deepgram tokenizes consecutive words with end_of_prev = start_of_next even
+  when there's real acoustic silence between, so word-gap-based splitting on
+  Deepgram boundaries fires almost never (we measured this).
+- ffmpeg silencedetect at speech thresholds catches silence during the
+  natural decay of word endings, which then gets misattributed as "before the
+  word's end" because Deepgram's reported word end is loose (±50-100ms). The
+  splitter ends up cutting INTO the last word of each sub-range.
+- wav2vec2's per-word boundaries are precise, AND the gap between two
+  consecutive word boundaries IS the actual inter-word silence. Splitting
+  here is safe — the split point is the same boundary used to mark the
+  word's end, so we can't accidentally cut into it.
+
+Tuning-free where it matters: wav2vec2-base-960h is a fixed model. The
+0.2s threshold is the lower bound of noticeable speech pause.
 
 Public API:
     refine_ranges(clip_json, audio_path, dg_words) -> dict
 
 Pipeline integration: called in cleanup.run_pipeline after align(). See
-prompts.py (Block 1 / pause-aware span breaks) for the editorial side that
-runs before this.
+prompts.py (Block 1 / pause-aware span breaks) for the editorial side.
 """
 from __future__ import annotations
 
@@ -41,6 +54,13 @@ log = logging.getLogger(__name__)
 # of a machine; first job after a deploy pays the download cost once.
 _MODEL_ID = "facebook/wav2vec2-base-960h"
 _SAMPLE_RATE = 16000
+
+# Internal-silence split threshold — wav2vec2-measured inter-word gap above
+# which we split a kept range. 200ms is the lower bound of noticeable speech
+# pause; below this is natural inter-word flow. Same threshold semantics as
+# Block 1's pause-aware span breaks, but measured against wav2vec2 precise
+# boundaries instead of the annotated transcript's pause markers.
+INTERNAL_SILENCE_SPLIT_S = 0.2
 
 # Lazy-loaded singletons. Loading at import time would pull ~360MB just to
 # import the module — bad for cold-start latency on the worker.
@@ -171,38 +191,123 @@ def _align_words(audio: np.ndarray, words: list[str]) -> list[tuple[float, float
     return out
 
 
+def _split_indices_on_wav2vec2_gaps(
+    i0: int, i1: int, timings: list[tuple[float, float] | None]
+) -> list[int]:
+    """Return word indices AFTER which to split (i.e. the last word of each
+    pre-split sub-range), based on wav2vec2 inter-word gaps ≥ threshold.
+
+    Empty list = no internal silence found, keep the range as-is.
+    """
+    splits: list[int] = []
+    for k in range(i0, i1):
+        t_k = timings[k] if k < len(timings) else None
+        t_k1 = timings[k + 1] if k + 1 < len(timings) else None
+        if t_k is None or t_k1 is None:
+            continue
+        gap = t_k1[0] - t_k[1]
+        if gap >= INTERNAL_SILENCE_SPLIT_S:
+            splits.append(k)
+    return splits
+
+
+def _build_sub_range(
+    dg_words: list[dict],
+    timings: list[tuple[float, float] | None],
+    i_start: int,
+    i_end: int,
+) -> dict:
+    """Build a range dict for words[i_start..i_end] using wav2vec2 timings
+    for start/end AND for the surrounding silence durations.
+
+    pre_silence_ms = wav2vec2 gap from previous word (0 if first in source)
+    post_silence_ms = wav2vec2 gap to next word (0 if last in source)
+
+    Using wav2vec2 gaps here (not Deepgram) so render-time padding logic sees
+    the actual acoustic silence available, not Deepgram's 0ms-everywhere lie.
+    """
+    t_start = timings[i_start]
+    t_end = timings[i_end]
+    start_s = float(t_start[0]) if t_start is not None else float(dg_words[i_start]["start"])
+    end_s = float(t_end[1]) if t_end is not None else float(dg_words[i_end]["end"])
+
+    pre_silence_ms = 0.0
+    if i_start > 0:
+        t_prev = timings[i_start - 1]
+        if t_prev is not None and t_start is not None:
+            pre_silence_ms = max(0.0, (t_start[0] - t_prev[1]) * 1000.0)
+        else:
+            pre_silence_ms = max(
+                0.0, (dg_words[i_start]["start"] - dg_words[i_start - 1]["end"]) * 1000.0
+            )
+
+    post_silence_ms = 0.0
+    if i_end + 1 < len(dg_words):
+        t_next = timings[i_end + 1] if i_end + 1 < len(timings) else None
+        if t_next is not None and t_end is not None:
+            post_silence_ms = max(0.0, (t_next[0] - t_end[1]) * 1000.0)
+        else:
+            post_silence_ms = max(
+                0.0, (dg_words[i_end + 1]["start"] - dg_words[i_end]["end"]) * 1000.0
+            )
+
+    return {
+        "start": round(start_s, 3),
+        "end": round(end_s, 3),
+        "start_word_idx": i_start,
+        "end_word_idx": i_end,
+        "pre_silence_ms": round(pre_silence_ms, 1),
+        "post_silence_ms": round(post_silence_ms, 1),
+    }
+
+
 def refine_ranges(clip_json: dict, audio_path: str | Path, dg_words: list[dict]) -> dict:
-    """Snap each range in clip_json.segments[].ranges to exact word boundaries.
+    """Two-step range refinement:
 
-    Strategy: forced-align the full Deepgram word list against the source audio
-    once, then for each range look up the refined start/end of its head and
-    tail Deepgram words via start_word_idx / end_word_idx (which clip.make_range
-    already produces). The original clip_json is not mutated — a deep copy is
-    returned.
+    1) wav2vec2 + CTC forced alignment over the full Deepgram word sequence,
+       producing per-word precise (start, end) timings.
+    2) For each kept range, walk consecutive word pairs and split the range
+       at any wav2vec2-measured gap ≥ INTERNAL_SILENCE_SPLIT_S. Each sub-range
+       gets wav2vec2 boundaries on both edges, and pre/post_silence_ms
+       computed from wav2vec2 inter-word gaps (so render-time padding has
+       correct headroom for the post-split sub-ranges).
 
-    If alignment fails for the head or tail word (e.g. normalized form had no
-    in-vocab characters), the original imprecise timestamps for that range are
-    preserved rather than corrupted with None.
+    The original clip_json is not mutated — a deep copy is returned.
+
+    If wav2vec2 alignment fails for a range's head or tail word (e.g.
+    normalized form had no in-vocab characters), the original Deepgram-based
+    timestamps for that range are preserved rather than corrupted with None.
     """
     audio = _extract_audio(Path(audio_path))
     norm_words = [_normalize_token(w.get("word", "")) for w in dg_words]
     timings = _align_words(audio, norm_words)
 
+    split_count = 0
     out = copy.deepcopy(clip_json)
     for seg in out.get("segments", []):
+        new_ranges: list[dict] = []
         for rng in seg.get("ranges", []):
             i0 = rng.get("start_word_idx")
             i1 = rng.get("end_word_idx")
-            if i0 is None or i1 is None:
-                # Defensive: a range without word indices can't be refined.
-                # Older clip_json shapes may lack these — leave untouched.
+            if i0 is None or i1 is None or i0 < 0 or i1 >= len(timings):
+                # Defensive: a range without proper word indices can't be
+                # split or refined. Keep as-is.
+                new_ranges.append(rng)
                 continue
-            if i0 < 0 or i1 >= len(timings):
-                continue
-            head = timings[i0]
-            tail = timings[i1]
-            if head is None or tail is None:
-                continue
-            rng["start"] = round(float(head[0]), 3)
-            rng["end"] = round(float(tail[1]), 3)
+
+            # Step 2a: find internal wav2vec2 gaps to split on.
+            split_after = _split_indices_on_wav2vec2_gaps(i0, i1, timings)
+            split_count += len(split_after)
+
+            # Build sub-ranges. If no splits, this produces one sub-range
+            # spanning [i0, i1] — equivalent to the old behavior.
+            sub_start = i0
+            boundaries = split_after + [i1]
+            for sub_end in boundaries:
+                sub_ranges_built = _build_sub_range(dg_words, timings, sub_start, sub_end)
+                new_ranges.append(sub_ranges_built)
+                sub_start = sub_end + 1
+        seg["ranges"] = new_ranges
+
+    log.info("refine: split %d internal silence(s) across all ranges", split_count)
     return out
