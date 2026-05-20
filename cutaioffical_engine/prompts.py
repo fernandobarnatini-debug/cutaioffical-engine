@@ -74,6 +74,11 @@ WHAT TO REMOVE
      - "...I love this really — this really soft hoodie." → Cut "this really" — abandoned. Keep "this really soft hoodie."
      - "...made of this — this is made of cotton." → Cut "made of this" — abandoned noun. Keep "this is made of cotton."
      Signal: the fragment is grammatically incomplete (determiner + optional adjective with no noun) AND a restart immediately follows that supplies the missing noun. If both are present, the fragment is a false start, not a kept clause. Do NOT apply this when the apparent fragment is actually complete in context ("This shirt is soft. This shirt is also stretchy." — both complete, keep both).
+     STRUCTURAL OPENER-REPEAT SIGNAL — apply the abandoned-noun cut whenever the SAME prepositional/determiner opener (e.g., "with this", "made with this", "in this", "of this", "from this", "for this", "this is", "I love this", "this brand new") appears TWICE within ~10 words, and the second occurrence ends in a different head noun than the first. Treat the first as abandoned EVEN IF the first occurrence's trailing word could grammatically parse as a noun in isolation. The repeated opener is itself sufficient evidence of a restart; do not "rescue" the first attempt by re-analyzing its trailing word as a possible head noun.
+     - "made with this micro it's made with this French Terry fabric" → Cut "made with this micro". The opener "made with this" repeats; the head noun "fabric" arrives only in the restart. "Micro" could be a noun, but the opener repeat tells you it wasn't the intended head.
+     - "I want this color I want this espresso color" → Cut "I want this color". Even though "color" is a valid noun, "I want this" repeats and the second adds the actual modifier the speaker meant.
+     - "in this hoodie ⟨pause 0.4s⟩ in this jacket" → Cut "in this hoodie". Opener "in this" repeats; speaker corrected the product reference.
+     This structural rule is what distinguishes a restart from parallel listing. Parallel listing repeats the opener with each iteration ALREADY completed and SEPARATED BY LIST COMMAS/AND ("their all natural body wash, their all natural body lotion, and their all natural long lasting deodorant" — each item is comma-separated and complete; the speaker progresses through ALL of them). A restart has the second opener immediately overwriting the first WITHOUT a comma list intervening.
 
 3. FILLERS — um, uh, like (filler use), you know, I mean (filler use), so yeah, basically (when meaningless), literally (when meaningless).
    • Keep "like" when it's comparison: "It's like a soft sweater" stays.
@@ -87,6 +92,13 @@ WHAT TO REMOVE
 4. FUMBLES — stutters, repeated words, mid-word corrections.
    • "They're they're actually really nice." → "They're actually really nice."
    • "It's bu— it's buttery soft." → "It's buttery soft."
+   • PHRASE-LEVEL RESTARTS — same mechanic as a stutter, but at the phrase level. When a 3+ word opening sequence appears twice within a 6-word window inside a single span (no ⟨pause⟩ marker between the two attempts), and the FIRST occurrence is NOT followed by a completing predicate/object before the second occurrence begins, the speaker has restarted the line. Cut everything from the start of the first occurrence through the last word before the second occurrence; keep the second occurrence and the completion that follows it.
+     - "You just got a brand new we just got a brand new drop from comfort." → Keep only "we just got a brand new drop from comfort." Same 5-word frame ("___ just got a brand new") is repeated within 6 words; the first attempt never reaches a completing object before the restart, the second proceeds to "drop from comfort."
+     - "It's gonna be it's gonna be the best shirt you own." → Keep "It's gonna be the best shirt you own."
+     - "We launched our we launched our newest drop today." → Keep "We launched our newest drop today."
+     Signal test: both opening sequences begin (≥3 word overlap), they are ≤6 words apart, and the earlier sequence terminates at the start of the later one with no intervening payoff. If the earlier sequence does reach its own completion (a noun, verb-object, or full clause) before the later one starts, this rule does NOT apply — that is either intentional repetition or two parallel ideas.
+     DO NOT apply when each iteration of the repeated construction has its OWN distinct completion (parallel listing): "their all natural body wash, their all natural body lotion, and their all natural long lasting deodorant" — every "their all natural ___" completes with a different noun, see INTENTIONAL STRUCTURAL REPETITION.
+     DO NOT apply to discourse-marker repetition that introduces distinct clauses: "I am telling you, I tried washing my sheets... I am telling you, after finding this..." — each instance opens a new, complete point. Keep both.
 
 5. TANGENTS — off-topic asides that don't return to the main message, OR content the speaker explicitly abandons.
    Signals: "anyway," "where was I," topic shift that doesn't pay off.
@@ -145,6 +157,81 @@ HARD OVERRIDE — if the pause is ≥2.0s, ALWAYS split, regardless of
 whether it falls between clauses or mid-clause. A 2+ second pause is
 unequivocally a deliberate stop, not natural speech rhythm. Splitting
 is mandatory at that magnitude.
+
+═══════════════════════════════════════════════════════
+CROSS-SPAN REDUNDANCY — ADJACENT-SPAN COLLAPSE
+═══════════════════════════════════════════════════════
+
+After SPAN BREAKS AT PAUSES has produced your list of kept_spans, audit
+adjacent pairs of kept_spans for cross-span retakes. Block 1's pause
+splitting correctly places multiple takes of the same idea into separate
+spans, but the in-span retake rule cannot see across span boundaries —
+this step closes that gap.
+
+TRIGGER: two ADJACENT kept_spans share a substring of ≥4 consecutive
+content words (ignore leading discourse markers like "and", "but", "so",
+"okay", "alright", and inline fillers when computing the overlap), AND
+the second span restates the first more completely — it adds a noun,
+modifier, or clause completion the first lacked, fixes a partial/
+truncated word (mat → material), or starts with an explicit retake
+marker ("I mean", "actually", "what I mean is", "wait", "let me try
+that again").
+
+ACTION: drop the FIRST span ENTIRELY. Move its text verbatim into
+removed_segments with reason "retake". Keep the second span unchanged.
+
+EXAMPLES (BEFORE → AFTER):
+
+  Before:
+    [ "Has, like, that nice wedding feel to it.",
+      "it kinda has, like, that nice wedding or vacation feel to it." ]
+  Shared content substring: "that nice wedding feel" (4 words). Second
+  is more complete (adds "or vacation").
+  After: drop the first. Keep only the second.
+
+  Before:
+    [ "First of all, the Korean body wash uses a b and PHA's, which actually do a good job at brightening up your skin tone.",
+      "first of all, the Korean skincare actually uses a, b, and PHAs, which do a really good job at evening out and brightening up your skin tone," ]
+  Shared substrings: "first of all, the Korean", "brightening up your skin tone".
+  Second is more complete (adds "evening out and").
+  After: drop the first. Keep only the second.
+
+  Before:
+    [ "You have brown eyes like me, this espresso pop.",
+      "And if you have brown eyes like me, this espresso is your color, and you just cannot go wrong with this brand new ivory color." ]
+  Shared substring: "you have brown eyes like me, this espresso"
+  (way more than 4 content words). Second adds "is your color..."
+  After: drop the first. Keep only the second.
+
+DO NOT APPLY WHEN:
+  - The shared substring is a DISCOURSE MARKER introducing DIFFERENT
+    content in each span. "And I am telling you, I tried washing my
+    sheets every day. I tried different body washes. I could never get
+    rid of my body acne." + "but I am telling you after finding this,
+    I'm not insecure to take my shirt off at a beach because almost all
+    of my body acne is gone." — share only "I am telling you" (4 words),
+    but each span continues with a distinct, complete point (problem
+    setup vs. resolution). KEEP both.
+  - The two spans express PARALLEL DIFFERENT ideas (contrast, comparison,
+    skin-tone enumeration, list items). "If you have brown eyes, go with
+    espresso." + "If you have tan skin and black hair, go with berry."
+    share "if you have ... go with" but each names a DIFFERENT skin tone
+    and product. KEEP both.
+  - The two spans are INTENTIONAL ESCALATION/ENUMERATION: "X is good.
+    ⟨pause⟩ Y is better. ⟨pause⟩ Z is the best." Each is its own beat,
+    none restates another. KEEP all (see INTENTIONAL STRUCTURAL
+    REPETITION).
+  - The second span ADDS A NEW IDEA chained onto a complete first idea,
+    not restating it. "The shirts are slightly oversized." + "Where the
+    shorts are a little bit more true to size." — share no 4-word content
+    substring; different products. KEEP both.
+
+DECIDING "MORE COMPLETE": the later span has a head noun, modifier, or
+clause-completion the earlier lacked; OR the later span fixes a partial/
+truncated word from the earlier; OR the later span begins with an
+explicit retake marker. If both spans are equally complete and merely
+paraphrase each other, prefer the SECOND (per DECISION RULES — later
+attempts win).
 
 ═══════════════════════════════════════════════════════
 INTENTIONAL STRUCTURAL REPETITION
