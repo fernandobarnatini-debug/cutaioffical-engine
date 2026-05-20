@@ -108,6 +108,45 @@ WHAT TO KEEP
 - The hook (first 1–2 sentences) unless it's clearly a false start.
 
 ═══════════════════════════════════════════════════════
+SPAN BREAKS AT PAUSES
+═══════════════════════════════════════════════════════
+
+When a ⟨pause N.Ns⟩ marker ≥0.3s appears between two clauses you are
+keeping, END the current kept_span before the pause and START a new
+kept_span after it. A kept_span should be a continuous run of speech
+without long internal silences — the renderer concatenates kept_spans
+back-to-back, so internal silences in a span play as dead air in the
+final cut.
+
+Examples:
+
+  Input:  "...drop from comfort. ⟨pause 0.7s⟩ And if you're a guy..."
+  Correct: kept_spans = [
+    "...drop from comfort.",
+    "And if you're a guy..."
+  ]
+  Wrong:   kept_spans = [
+    "...drop from comfort. And if you're a guy..."   ← 700ms of silence inside
+  ]
+
+  Input:  "...material. ⟨pause 0.4s⟩ Actually, it's also..."
+  Correct: kept_spans = [
+    "...material.",
+    "Actually, it's also..."
+  ]
+
+This rule applies ONLY between clauses. Do NOT split mid-sentence at a
+shorter pause — those are natural breath. Specifically:
+  - If the pause is between two complete sentences/clauses: SPLIT.
+  - If the pause is mid-clause (inside an unfinished thought): keep
+    together; that's likely a hesitation, not a clause break.
+
+HARD OVERRIDE — if the pause is ≥2.0s, ALWAYS split, regardless of
+whether it falls between clauses or mid-clause. A 2+ second pause is
+unequivocally a deliberate stop, not natural speech rhythm. Splitting
+is mandatory at that magnitude.
+
+═══════════════════════════════════════════════════════
 INTENTIONAL STRUCTURAL REPETITION
 ═══════════════════════════════════════════════════════
 
