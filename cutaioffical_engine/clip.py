@@ -23,7 +23,13 @@ def tokenize(text: str) -> list[str]:
     return [t for t in (normalize_token(w) for w in text.split()) if t]
 
 
-MIN_CHUNK_TOKENS = 2
+# MIN_CHUNK_TOKENS = 1 admits single-token spans into the render plan. This
+# is required for structural-repetition hooks ("One.", "Two.", "Three of
+# these...") where Sonnet correctly emits each count item as its own kept
+# span; the previous floor of 2 silently dropped them. Validated against
+# real prod failure case 95d0a5c0: with 1, 6/6 spans render; with 2, 4/6
+# render and the count is gone.
+MIN_CHUNK_TOKENS = 1
 
 
 def find_longest_substring(
