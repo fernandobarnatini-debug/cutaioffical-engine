@@ -128,14 +128,29 @@ class TestPaddedRanges(unittest.TestCase):
         self.assertAlmostEqual(e, 6.0 + PAD_FLOOR_MS / 1000.0, places=4)
 
     def test_target_applies_with_sufficient_silence(self) -> None:
-        # Range with abundant silence on both sides — should hit TARGET.
+        # Long-clip (≥1.5s) range with abundant silence on both sides —
+        # should hit HEAD_TARGET_MS (0 by default) and TAIL_TARGET_MS (30).
         flat = [
-            {"start": 5.0, "end": 6.0, "pre_silence_ms": 500, "post_silence_ms": 500},
+            {"start": 5.0, "end": 7.0, "pre_silence_ms": 500, "post_silence_ms": 500},
         ]
         out = _padded_ranges(flat)
         s, e = out[0]
         self.assertAlmostEqual(s, 5.0 - HEAD_TARGET_MS / 1000.0, places=4)
-        self.assertAlmostEqual(e, 6.0 + TAIL_TARGET_MS / 1000.0, places=4)
+        self.assertAlmostEqual(e, 7.0 + TAIL_TARGET_MS / 1000.0, places=4)
+
+    def test_short_clip_gets_attack_window(self) -> None:
+        # Short-clip (<1.5s) standalone utterance — gets the SHORT_CLIP_HEAD_MS
+        # attack window instead of HEAD_TARGET_MS, matching the symmetric
+        # consonant-release tail. This is what makes structural-repetition
+        # items ("One.", "Two.", "Not one") not sound robotic.
+        from cutaioffical_engine.render import SHORT_CLIP_HEAD_MS
+        flat = [
+            {"start": 5.0, "end": 5.4, "pre_silence_ms": 500, "post_silence_ms": 500},
+        ]
+        out = _padded_ranges(flat)
+        s, e = out[0]
+        self.assertAlmostEqual(s, 5.0 - SHORT_CLIP_HEAD_MS / 1000.0, places=4)
+        self.assertAlmostEqual(e, 5.4 + TAIL_TARGET_MS / 1000.0, places=4)
 
     def test_hard_cap_prevents_overlap(self) -> None:
         # Two ranges, gap of 50ms between them. Hard cap = 25ms per side.

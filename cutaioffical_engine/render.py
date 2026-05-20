@@ -18,7 +18,8 @@ from typing import Any
 
 # Padding constants — dropped to near-zero after Block 3 (refine.py) started
 # producing sub-50ms-accurate word boundaries via wav2vec2 + CTC.
-#   HEAD_TARGET_MS = 0  — word starts are now precise; no compensation needed.
+#   HEAD_TARGET_MS = 0  — word starts are now precise; no compensation needed
+#                        for sentence-flow cuts.
 #   TAIL_TARGET_MS = 30 — physically defensible: stop consonants (p, t, k, d, g)
 #                        have a brief release burst (~30ms) after the model's
 #                        reported word_end. 30ms catches that without adding
@@ -28,6 +29,17 @@ from typing import Any
 HEAD_TARGET_MS = 0
 TAIL_TARGET_MS = 30
 PAD_FLOOR_MS = 0
+
+# Short-clip head padding — for standalone utterances (counts, negation chains,
+# single-word reveals like "One.", "Two.", "Black", "Blue", "Not one", "Not
+# two"), the sharp consonant-onset cut sounds robotic because there's no
+# surrounding sentence flow to mask the abrupt start. Add a 30ms attack window
+# matching the symmetric 30ms tail (consonant release). The 1.5s threshold is
+# the natural boundary between a standalone utterance and a sentence at typical
+# speech rates — below it the clip lacks the rhythmic context that hides a
+# sharp start.
+SHORT_CLIP_DURATION_S = 1.5
+SHORT_CLIP_HEAD_MS = 30
 
 
 def _flatten_ranges(clip_json: dict[str, Any]) -> list[dict[str, Any]]:
@@ -82,7 +94,14 @@ def _padded_ranges(flat: list[dict[str, Any]]) -> list[tuple[float, float]]:
             inter_ms = max(0.0, (flat[i + 1]["start"] - r["end"]) * 1000.0)
             tail_hard_cap = inter_ms / 2.0
 
-        head_pad = max(PAD_FLOOR_MS, min(HEAD_TARGET_MS, r["pre_silence_ms"]))
+        # Short standalone utterances get a symmetric 30ms attack window to
+        # match the 30ms tail; sentence-flow cuts get HEAD_TARGET_MS=0 because
+        # the surrounding rhythm masks the precise onset.
+        duration_s = r["end"] - r["start"]
+        is_short = duration_s < SHORT_CLIP_DURATION_S
+        head_target = SHORT_CLIP_HEAD_MS if is_short else HEAD_TARGET_MS
+
+        head_pad = max(PAD_FLOOR_MS, min(head_target, r["pre_silence_ms"]))
         head_pad = max(0.0, min(head_pad, head_hard_cap))
         tail_pad = max(PAD_FLOOR_MS, min(TAIL_TARGET_MS, r["post_silence_ms"]))
         tail_pad = max(0.0, min(tail_pad, tail_hard_cap))
