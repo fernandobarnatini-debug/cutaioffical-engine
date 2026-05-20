@@ -46,12 +46,7 @@ LLM_TIMEOUT_SECONDS = 120.0
 OPENROUTER_BASE_URL = "https://openrouter.ai/api/v1"
 MODEL = "anthropic/claude-sonnet-4.5"
 
-PAUSE_MARKER_THRESHOLD = 0.3  # seconds; pauses ≥ this get an explicit marker for the AI.
-# 300ms is the physical boundary between natural inter-word gaps (30–150ms)
-# and intentional breath / sentence-break pauses (200ms+). Below 300ms is
-# normal speech rhythm; at/above 300ms is a deliberate stop. Lowered from
-# 0.5s once Sonnet was taught to split kept_spans at pause markers — see
-# SPAN BREAKS AT PAUSES in prompts.py.
+PAUSE_MARKER_THRESHOLD = 0.5  # seconds; pauses ≥ this get an explicit marker for the AI
 
 
 def extract_audio(video_path: Path, wav_path: Path) -> None:
