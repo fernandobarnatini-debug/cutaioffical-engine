@@ -30,16 +30,25 @@ HEAD_TARGET_MS = 0
 TAIL_TARGET_MS = 30
 PAD_FLOOR_MS = 0
 
-# Short-clip head padding — for standalone utterances (counts, negation chains,
-# single-word reveals like "One.", "Two.", "Black", "Blue", "Not one", "Not
-# two"), the sharp consonant-onset cut sounds robotic because there's no
-# surrounding sentence flow to mask the abrupt start. Add a 30ms attack window
-# matching the symmetric 30ms tail (consonant release). The 1.5s threshold is
-# the natural boundary between a standalone utterance and a sentence at typical
-# speech rates — below it the clip lacks the rhythmic context that hides a
-# sharp start.
+# Short-clip head/tail padding — for standalone utterances (counts, negation
+# chains, single-word reveals like "One.", "Two.", "Black", "Blue", "Not one"),
+# wav2vec2 snaps tight to the phoneme core but the natural pronunciation
+# includes pre-onset preparation and post-offset resonance/breath. For long
+# sentences the surrounding flow masks this — for short standalone utterances
+# every ms matters because the word IS the clip.
+#
+# Constants chosen from acoustic phonetics rather than from per-video tuning:
+#   60ms head — Voice-Onset-Time (VOT) for English stops ranges 0–100ms; 60ms
+#               gives a natural pre-onset window without dead air.
+#   80ms tail — Nasal/voiced consonant resonance ("nnn" in "one", "m" in "ten")
+#               trails 50–100ms past the model's reported offset. 80ms catches
+#               that decay for words ending in n/m/ng/l/r — i.e. most
+#               structural-repetition content.
+#   1.5s threshold — the natural boundary between standalone utterance and
+#                    sentence at typical speech rates.
 SHORT_CLIP_DURATION_S = 1.5
-SHORT_CLIP_HEAD_MS = 30
+SHORT_CLIP_HEAD_MS = 60
+SHORT_CLIP_TAIL_MS = 80
 
 
 def _flatten_ranges(clip_json: dict[str, Any]) -> list[dict[str, Any]]:
@@ -94,16 +103,19 @@ def _padded_ranges(flat: list[dict[str, Any]]) -> list[tuple[float, float]]:
             inter_ms = max(0.0, (flat[i + 1]["start"] - r["end"]) * 1000.0)
             tail_hard_cap = inter_ms / 2.0
 
-        # Short standalone utterances get a symmetric 30ms attack window to
-        # match the 30ms tail; sentence-flow cuts get HEAD_TARGET_MS=0 because
-        # the surrounding rhythm masks the precise onset.
+        # Short standalone utterances get larger head + tail windows than
+        # sentence-flow cuts. wav2vec2 snaps tight to the phoneme core and
+        # misses the natural VOT preparation + voiced-consonant resonance
+        # decay — only matters for short clips where there's no surrounding
+        # rhythm to hide the tightness.
         duration_s = r["end"] - r["start"]
         is_short = duration_s < SHORT_CLIP_DURATION_S
         head_target = SHORT_CLIP_HEAD_MS if is_short else HEAD_TARGET_MS
+        tail_target = SHORT_CLIP_TAIL_MS if is_short else TAIL_TARGET_MS
 
         head_pad = max(PAD_FLOOR_MS, min(head_target, r["pre_silence_ms"]))
         head_pad = max(0.0, min(head_pad, head_hard_cap))
-        tail_pad = max(PAD_FLOOR_MS, min(TAIL_TARGET_MS, r["post_silence_ms"]))
+        tail_pad = max(PAD_FLOOR_MS, min(tail_target, r["post_silence_ms"]))
         tail_pad = max(0.0, min(tail_pad, tail_hard_cap))
 
         out.append((

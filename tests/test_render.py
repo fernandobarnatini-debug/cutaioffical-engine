@@ -139,18 +139,20 @@ class TestPaddedRanges(unittest.TestCase):
         self.assertAlmostEqual(e, 7.0 + TAIL_TARGET_MS / 1000.0, places=4)
 
     def test_short_clip_gets_attack_window(self) -> None:
-        # Short-clip (<1.5s) standalone utterance — gets the SHORT_CLIP_HEAD_MS
-        # attack window instead of HEAD_TARGET_MS, matching the symmetric
-        # consonant-release tail. This is what makes structural-repetition
-        # items ("One.", "Two.", "Not one") not sound robotic.
-        from cutaioffical_engine.render import SHORT_CLIP_HEAD_MS
+        # Short-clip (<1.5s) standalone utterance — gets larger head + tail
+        # padding (SHORT_CLIP_HEAD_MS / SHORT_CLIP_TAIL_MS) than sentence-flow
+        # cuts, to compensate for wav2vec2's tight phoneme-core snapping that
+        # misses the natural VOT prep and voiced-consonant resonance decay.
+        # This is what makes structural-repetition items ("One.", "Two.",
+        # "Not one") play at natural counting cadence instead of rushed.
+        from cutaioffical_engine.render import SHORT_CLIP_HEAD_MS, SHORT_CLIP_TAIL_MS
         flat = [
             {"start": 5.0, "end": 5.4, "pre_silence_ms": 500, "post_silence_ms": 500},
         ]
         out = _padded_ranges(flat)
         s, e = out[0]
         self.assertAlmostEqual(s, 5.0 - SHORT_CLIP_HEAD_MS / 1000.0, places=4)
-        self.assertAlmostEqual(e, 5.4 + TAIL_TARGET_MS / 1000.0, places=4)
+        self.assertAlmostEqual(e, 5.4 + SHORT_CLIP_TAIL_MS / 1000.0, places=4)
 
     def test_hard_cap_prevents_overlap(self) -> None:
         # Two ranges, gap of 50ms between them. Hard cap = 25ms per side.
