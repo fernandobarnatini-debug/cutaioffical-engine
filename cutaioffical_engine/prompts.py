@@ -69,6 +69,11 @@ WHAT TO REMOVE
 2. FALSE STARTS — sentences abandoned mid-thought and restarted, OR opener attempts restated after a pause.
    • "It's about — it's really about — okay, it's about authenticity." → Keep only "It's about authenticity."
    • "So get ready. ⟨pause 0.7s⟩ So we're gonna style this shirt." → Cut "So get ready." When the speaker opens with one framing then restarts with a new framing (often signaled by repeating an opener word like "So", "Okay", "Alright"), the first attempt was abandoned.
+   • ABANDONED NOUN FRAGMENTS — when a clause appears to end with an INCOMPLETE noun phrase (a determiner like "this/a/the/that" followed by an adjective or partial word, with NO payoff noun) AND the next phrase restarts the same content with the noun filled in, the incomplete version is abandoned. Cut it.
+     - "...collection made with this micro it's made with this French Terry fabric." → Cut "made with this micro" — the noun never arrived; speaker restarted with "this French Terry fabric." Keep only the restart.
+     - "...I love this really — this really soft hoodie." → Cut "this really" — abandoned. Keep "this really soft hoodie."
+     - "...made of this — this is made of cotton." → Cut "made of this" — abandoned noun. Keep "this is made of cotton."
+     Signal: the fragment is grammatically incomplete (determiner + optional adjective with no noun) AND a restart immediately follows that supplies the missing noun. If both are present, the fragment is a false start, not a kept clause. Do NOT apply this when the apparent fragment is actually complete in context ("This shirt is soft. This shirt is also stretchy." — both complete, keep both).
 
 3. FILLERS — um, uh, like (filler use), you know, I mean (filler use), so yeah, basically (when meaningless), literally (when meaningless).
    • Keep "like" when it's comparison: "It's like a soft sweater" stays.
