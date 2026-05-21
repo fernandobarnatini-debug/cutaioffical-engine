@@ -236,19 +236,32 @@ def run_cleanup(video_path: str | Path) -> dict:
 
 
 def run_pipeline(video_path: str | Path) -> dict:
-    """Full pipeline: cleanup + clip alignment + Block-3 word-boundary refinement."""
+    """Full pipeline: cleanup + clip alignment + Block-3 word-boundary refinement.
+
+    Internal-silence splitting is disabled to match the CLI behavior signed off
+    on 2026-05-21 with `--keep-internal-silence`. Natural breaths inside a
+    kept_span are preserved as audible time in the final cut rather than being
+    sliced out. Cross-span silence still drops via the span-break + concat
+    mechanism in the prompt and render; only WITHIN-clip pauses are kept.
+
+    To restore aggressive internal-silence splitting (original behavior),
+    call refine_ranges() directly with default args.
+    """
     video_path = Path(video_path)
     result = run_cleanup(video_path)
     t0 = time.time()
     result["clip"] = align(result["script"], result["deepgram"], video_name=video_path.stem)
     log.info("align done in %.1fs", time.time() - t0)
 
-    # Block 3: snap each range's start/end to sub-50ms-accurate word boundaries
-    # via wav2vec2 + CTC forced alignment. Eliminates the Deepgram word-boundary
-    # imprecision that the render-time padding constants (now near-zero) used to
-    # compensate for. See refine.py and render.py for the matching padding drop.
+    # Block 3: wav2vec2 + CTC forced alignment snaps each range's edges to
+    # sub-50ms-accurate word boundaries. We pass split_internal_silence=False
+    # so internal pauses (natural breaths, mid-sentence beats) are PRESERVED
+    # in the rendered cut — this matches the locally-tested CLI behavior.
     t0 = time.time()
     dg_words = result["deepgram"]["results"]["channels"][0]["alternatives"][0]["words"]
-    result["clip"] = refine_ranges(result["clip"], video_path, dg_words)
+    result["clip"] = refine_ranges(
+        result["clip"], video_path, dg_words,
+        split_internal_silence=False,
+    )
     log.info("refine done in %.1fs", time.time() - t0)
     return result
