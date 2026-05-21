@@ -192,6 +192,15 @@ def render(
         # way, the tradeoff is correct. CRF 20 still pins quality.
         "-preset", "ultrafast",
         "-crf", "20",
+        # Force a known iOS-Safari-compatible H.264 profile + level. Without
+        # these flags libx264 picks profile/level based on input resolution +
+        # ultrafast's feature flags — in practice that often lands at High
+        # 5.0+ for 1080p iPhone source, which iOS Safari silently refuses to
+        # decode in HTML5 <video> (the user sees "tap Play, nothing happens").
+        # High @ 4.2 supports up to 1080p60 and is universally playable on
+        # every iOS device since iOS 11.
+        "-profile:v", "high",
+        "-level:v", "4.2",
         # Force 8-bit yuv420p output. iPhone HDR / Dolby Vision sources land as
         # 10-bit (yuv420p10le) → libx264 silently picks the High 10 profile,
         # which no browser can decode in HTML5 <video> (Chrome, Safari, Firefox
