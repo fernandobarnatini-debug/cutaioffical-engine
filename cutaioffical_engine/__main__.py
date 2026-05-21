@@ -32,6 +32,8 @@ from .cleanup import (
     structure_script,
 )
 from .clip import align
+from .refine import refine_ranges
+from .render import render
 from openai import OpenAI
 from .cleanup import OPENROUTER_BASE_URL
 
@@ -46,6 +48,12 @@ def main(argv: list[str] | None = None) -> int:
                         help="Directory for output files (default: current dir)")
     parser.add_argument("--transcript-only", action="store_true",
                         help="Skip the AI step (and clip alignment)")
+    parser.add_argument("--render", action="store_true",
+                        help="After alignment, ffmpeg-render the cut to <stem>_cut.mp4 (requires a video input)")
+    parser.add_argument("--keep-internal-silence", action="store_true",
+                        help="Skip refine.py's in-clip silence splitter entirely. Preserves ALL internal silences (breaths AND dramatic mid-sentence pauses).")
+    parser.add_argument("--max-internal-silence", type=float, default=None, metavar="SECONDS",
+                        help="Surgical mode: preserve internal silences SHORTER than this threshold (natural breaths), split anything longer. Example: 0.7 keeps breaths up to 700ms but trims dramatic pauses. Overrides --keep-internal-silence when both are set.")
     args = parser.parse_args(argv)
 
     if not args.input.exists():
@@ -125,8 +133,45 @@ def main(argv: list[str] | None = None) -> int:
     (args.outdir / f"{stem}_script.txt").write_text(final_script + "\n")
 
     clip_result = align(script, dg_result, video_name=stem)
+
+    # Block 3 refinement: wav2vec2 + CTC forced alignment snaps each range's
+    # start/end to sub-50ms-accurate word boundaries. Production runs this in
+    # run_pipeline() — without it, renders use Deepgram's loose ±50–100ms
+    # word ends and the render padding constants over/under-compensate.
+    # Skipped when input is a Deepgram .json (no source audio to align against).
+    if not is_json_input:
+        if args.max_internal_silence is not None:
+            print(f"Refining word boundaries (wav2vec2, split internal silence ≥ {args.max_internal_silence:.2f}s)...")
+        elif args.keep_internal_silence:
+            print("Refining word boundaries (wav2vec2, internal-silence split DISABLED)...")
+        else:
+            print("Refining word boundaries (wav2vec2)...")
+        try:
+            clip_result = refine_ranges(
+                clip_result,
+                args.input,
+                dg_result["results"]["channels"][0]["alternatives"][0]["words"],
+                split_internal_silence=not args.keep_internal_silence,
+                internal_silence_threshold_s=args.max_internal_silence,
+            )
+        except (RuntimeError, KeyError) as e:
+            print(f"warning: refine step skipped: {e}", file=sys.stderr)
+
     with open(args.outdir / f"{stem}_clip.json", "w") as f:
         json.dump(clip_result, f, indent=2)
+
+    if args.render:
+        if is_json_input:
+            print("error: --render needs a video input, not a Deepgram JSON", file=sys.stderr)
+            return 1
+        cut_path = args.outdir / f"{stem}_cut.mp4"
+        print(f"Rendering cut -> {cut_path.name}...")
+        try:
+            render(args.input, clip_result, cut_path)
+        except (RuntimeError, ValueError) as e:
+            print(f"error: render failed: {e}", file=sys.stderr)
+            return 1
+        print(f"  ok ({cut_path.stat().st_size / 1024 / 1024:.1f} MB)")
 
     print()
     print(final_script)

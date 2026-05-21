@@ -261,23 +261,57 @@ def _build_sub_range(
     }
 
 
-def refine_ranges(clip_json: dict, audio_path: str | Path, dg_words: list[dict]) -> dict:
+def refine_ranges(
+    clip_json: dict,
+    audio_path: str | Path,
+    dg_words: list[dict],
+    split_internal_silence: bool = True,
+    internal_silence_threshold_s: float | None = None,
+) -> dict:
     """Two-step range refinement:
 
     1) wav2vec2 + CTC forced alignment over the full Deepgram word sequence,
        producing per-word precise (start, end) timings.
     2) For each kept range, walk consecutive word pairs and split the range
-       at any wav2vec2-measured gap ≥ INTERNAL_SILENCE_SPLIT_S. Each sub-range
-       gets wav2vec2 boundaries on both edges, and pre/post_silence_ms
+       at any wav2vec2-measured gap ≥ threshold. Each sub-range gets
+       wav2vec2 boundaries on both edges, and pre/post_silence_ms
        computed from wav2vec2 inter-word gaps (so render-time padding has
        correct headroom for the post-split sub-ranges).
 
+    Internal-silence behavior is controlled by two parameters:
+
+      split_internal_silence=True (default) + internal_silence_threshold_s=None
+        → Production behavior. Split at any gap ≥ INTERNAL_SILENCE_SPLIT_S
+          (0.2s). Aggressively kills internal silence but can chop natural
+          breaths and sound staccato.
+
+      split_internal_silence=True + internal_silence_threshold_s=X (positive float)
+        → Surgical mode. Preserve gaps < X as audible time (natural breaths),
+          split anything ≥ X (dramatic mid-sentence pauses, hesitations).
+          Example: 0.7 keeps breaths up to 700ms but drops anything longer.
+
+      split_internal_silence=False
+        → Preserve all internal silence (legacy "keep all" mode). Equivalent
+          to passing a huge threshold. Natural cadence intact but dramatic
+          mid-sentence pauses play in full.
+
+    If both parameters are set in a way that disagrees, the threshold wins
+    (an explicit threshold overrides the boolean).
+
     The original clip_json is not mutated — a deep copy is returned.
 
-    If wav2vec2 alignment fails for a range's head or tail word (e.g.
-    normalized form had no in-vocab characters), the original Deepgram-based
-    timestamps for that range are preserved rather than corrupted with None.
+    If wav2vec2 alignment fails for a range's head or tail word, the original
+    Deepgram-based timestamps for that range are preserved.
     """
+    # Resolve the effective threshold. The explicit threshold wins over the
+    # boolean so the surgical and legacy modes can coexist on the same caller.
+    if internal_silence_threshold_s is not None:
+        threshold = float(internal_silence_threshold_s)
+    elif split_internal_silence:
+        threshold = INTERNAL_SILENCE_SPLIT_S
+    else:
+        threshold = float("inf")
+
     audio = _extract_audio(Path(audio_path))
     norm_words = [_normalize_token(w.get("word", "")) for w in dg_words]
     timings = _align_words(audio, norm_words)
@@ -295,12 +329,20 @@ def refine_ranges(clip_json: dict, audio_path: str | Path, dg_words: list[dict])
                 new_ranges.append(rng)
                 continue
 
-            # Step 2a: find internal wav2vec2 gaps to split on.
-            split_after = _split_indices_on_wav2vec2_gaps(i0, i1, timings)
-            split_count += len(split_after)
+            # Find internal wav2vec2 gaps ≥ threshold to split on. With
+            # threshold=inf, this returns an empty list — same shape as a
+            # range with no internal silence.
+            if threshold == float("inf"):
+                split_after: list[int] = []
+            else:
+                split_after = _split_indices_on_wav2vec2_gaps_with_threshold(
+                    i0, i1, timings, threshold
+                )
+                split_count += len(split_after)
 
             # Build sub-ranges. If no splits, this produces one sub-range
-            # spanning [i0, i1] — equivalent to the old behavior.
+            # spanning [i0, i1] — same shape as the original range but with
+            # wav2vec2-precise edge boundaries.
             sub_start = i0
             boundaries = split_after + [i1]
             for sub_end in boundaries:
@@ -309,5 +351,30 @@ def refine_ranges(clip_json: dict, audio_path: str | Path, dg_words: list[dict])
                 sub_start = sub_end + 1
         seg["ranges"] = new_ranges
 
-    log.info("refine: split %d internal silence(s) across all ranges", split_count)
+    if threshold == float("inf"):
+        log.info("refine: internal-silence splitting disabled; preserved all breaths in-place")
+    else:
+        log.info(
+            "refine: split %d internal silence(s) at threshold=%.2fs",
+            split_count, threshold,
+        )
     return out
+
+
+def _split_indices_on_wav2vec2_gaps_with_threshold(
+    i0: int, i1: int, timings: list[tuple[float, float] | None], threshold_s: float
+) -> list[int]:
+    """Return word indices after which to split, based on wav2vec2 inter-word
+    gaps ≥ threshold_s. The standalone helper exists so callers can pass an
+    explicit threshold without monkey-patching the module-level constant.
+    """
+    splits: list[int] = []
+    for k in range(i0, i1):
+        t_k = timings[k] if k < len(timings) else None
+        t_k1 = timings[k + 1] if k + 1 < len(timings) else None
+        if t_k is None or t_k1 is None:
+            continue
+        gap = t_k1[0] - t_k[1]
+        if gap >= threshold_s:
+            splits.append(k)
+    return splits

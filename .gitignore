@@ -24,5 +24,17 @@ Thumbs.db
 # Local test artifacts
 runs/
 out/
+cuts_out/
 *.cut.mp4
 *.fixed.mp4
+*_cut.mp4
+*_annotated.txt
+*_clip.json
+*_deepgram.json
+*_script.json
+*_script.txt
+*_transcript.txt
+
+# Local dev helpers (user-specific paths)
+run_batch.sh
+run_one.sh

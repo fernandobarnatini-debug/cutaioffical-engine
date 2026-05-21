@@ -16,47 +16,45 @@ import subprocess
 from pathlib import Path
 from typing import Any
 
-# Padding constants — calibrated for wav2vec2-precise word boundaries.
-#   HEAD_TARGET_MS = 0   — sentence-flow word starts are surrounded by rhythm
-#                          context; no pre-onset compensation needed.
-#   TAIL_TARGET_MS = 120 — voiced consonants and final vowels decay ~80–150ms
-#                          past wav2vec2's reported word_end (the model
-#                          predicts the phoneme core, not the natural release).
-#                          120ms captures the decay for sentence ends and
-#                          inter-sub-range cuts without dragging silence (the
-#                          post_silence_ms cap limits to actually-available
-#                          quiet). NOT per-video tuning — this is the natural
-#                          decay window for English voiced sounds.
-#   PAD_FLOOR_MS = 0     — no minimum padding needed when boundaries are
-#                          precise; quiet ranges stay quiet.
-HEAD_TARGET_MS = 0
-TAIL_TARGET_MS = 120
-PAD_FLOOR_MS = 0
+# Render style — flips between two padding profiles. Flip and redeploy the
+# worker to switch. The "default" profile is the original calibration; the
+# "keoni_tight" profile chops right at the syllable end to match the affiliate
+# CapCut workflow (zero noticeable dead space between cuts) at the cost of
+# occasionally clipping voiced consonants.
+#
+# "default"     — original padding calibrated for English voiced-consonant
+#                 decay (120ms tail / 150ms short-clip tail).
+# "keoni_tight" — affiliate-flow padding (40ms tail / 60ms short-clip tail).
+RENDER_STYLE = "keoni_tight"
 
-# Short-clip head/tail padding — for standalone utterances (counts, negation
-# chains, single-word reveals like "One.", "Two.", "Black", "Blue", "Not one"),
-# wav2vec2 snaps tight to the phoneme core but the natural pronunciation
-# includes pre-onset preparation and post-offset resonance/breath. For long
-# sentences the surrounding flow masks this — for short standalone utterances
-# every ms matters because the word IS the clip.
-#
-# Calibrated against the natural counting cadence of TikTok-Shop style hooks
-# ("One. Two. Three.", "Not one, not two, not three", count-up reveals).
-# Below this duration threshold, a clip is a standalone utterance — needs
-# noticeable pre-onset prep AND post-offset decay to sound natural; above it,
-# the surrounding sentence rhythm masks tight wav2vec2 boundaries.
-#
-# 120ms head + 150ms tail brings wav2vec2's tight phoneme-core boundaries
-# (~100–140ms raw) to ~370–410ms played, matching the natural deliberate
-# counting cadence creators use for emphasis. Verified by Isaac via A/B
-# listening test against 60/80, 80/100, 100/120, 120/150 variants on the
-# Henley count-reveal source.
-#
-# These constants encode "what natural emphasized counting sounds like" —
-# a content-domain choice, not per-video tuning.
+# Padding constants — calibrated against wav2vec2-precise word boundaries.
+#   HEAD_TARGET_MS — pre-onset compensation. 0 for sentence-flow because the
+#                    surrounding rhythm context masks tight starts.
+#   TAIL_TARGET_MS — post-offset compensation for voiced-consonant decay.
+#                    120ms = natural English decay; 40ms = chop at syllable end.
+#   PAD_FLOOR_MS   — minimum padding; 0 because wav2vec2 boundaries are precise.
+#   SHORT_CLIP_*   — wider window for short standalone utterances where there
+#                    is no surrounding rhythm to mask tight boundaries.
+PAD_FLOOR_MS = 0
 SHORT_CLIP_DURATION_S = 1.5
-SHORT_CLIP_HEAD_MS = 120
-SHORT_CLIP_TAIL_MS = 150
+
+if RENDER_STYLE == "keoni_tight":
+    # Affiliate-flow: cut at the end of the last syllable. Pairs with the
+    # Keoni prompt's tighter span-break threshold to deliver zero noticeable
+    # gap between cuts. Risk: voiced consonants ("s", "z", final vowels) may
+    # truncate on some words — accepted tradeoff for flow per Keoni.
+    HEAD_TARGET_MS = 0
+    TAIL_TARGET_MS = 40
+    SHORT_CLIP_HEAD_MS = 80
+    SHORT_CLIP_TAIL_MS = 60
+else:
+    # Original calibration. 120ms tail = English voiced-consonant decay
+    # window. 120/150 short-clip = natural deliberate counting cadence
+    # verified by A/B listening test on the Henley count-reveal source.
+    HEAD_TARGET_MS = 0
+    TAIL_TARGET_MS = 120
+    SHORT_CLIP_HEAD_MS = 120
+    SHORT_CLIP_TAIL_MS = 150
 
 
 def _flatten_ranges(clip_json: dict[str, Any]) -> list[dict[str, Any]]:
