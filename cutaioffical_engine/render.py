@@ -200,6 +200,14 @@ def render(
         "-pix_fmt", "yuv420p",
         "-c:a", "aac",
         "-b:a", "192k",
+        # +faststart moves the moov atom (track metadata) to the front of the
+        # MP4 so HTML5 <video> can start decoding before the full file has
+        # downloaded. Without this, iOS Safari and many mobile browsers
+        # silently refuse to play the cut until the whole file is buffered —
+        # which on mobile data with a multi-MB cut can mean tens of seconds
+        # of "tap Play and nothing happens." Adds a tiny post-encode pass
+        # to relocate the atom; trivial cost.
+        "-movflags", "+faststart",
         str(output_path),
     ]
     try:
