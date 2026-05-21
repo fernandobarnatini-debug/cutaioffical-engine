@@ -246,12 +246,46 @@ def run_pipeline(video_path: str | Path) -> dict:
 
     To restore aggressive internal-silence splitting (original behavior),
     call refine_ranges() directly with default args.
+
+    Returns the standard result dict with an additional `_timings` key:
+    per-phase wall-clock in milliseconds (extract_audio, deepgram, sonnet,
+    align, refine). The worker merges these into the jobs row's phase_timings
+    JSONB so we can SQL-query the actual bottleneck.
     """
     video_path = Path(video_path)
-    result = run_cleanup(video_path)
+    if not video_path.exists():
+        raise FileNotFoundError(f"video not found: {video_path}")
+
+    timings: dict[str, int] = {}
+
+    # Inline the previously-nested extract_audio + deepgram steps so each is
+    # timed individually (the original `_deepgram_from_video` bundled both).
+    load_dotenv()
+    dg_key = os.getenv("DEEPGRAM_API_KEY")
+    if not dg_key:
+        raise RuntimeError("DEEPGRAM_API_KEY not set in env/.env")
+
+    with tempfile.TemporaryDirectory(prefix="cutaioffical-") as tmpdir:
+        wav_path = Path(tmpdir) / "audio.wav"
+        t0 = time.time()
+        extract_audio(video_path, wav_path)
+        timings["extract_audio_ms"] = int((time.time() - t0) * 1000)
+
+        t0 = time.time()
+        deepgram = call_deepgram(wav_path.read_bytes(), dg_key)
+        timings["deepgram_ms"] = int((time.time() - t0) * 1000)
+
+    # Sonnet (script cleanup) — measured by wrapping run_cleanup_from_deepgram
+    # rather than structure_script directly so we capture the full LLM round
+    # trip including transcript annotation prep.
+    t0 = time.time()
+    result = run_cleanup_from_deepgram(deepgram)
+    timings["sonnet_ms"] = int((time.time() - t0) * 1000)
+
     t0 = time.time()
     result["clip"] = align(result["script"], result["deepgram"], video_name=video_path.stem)
-    log.info("align done in %.1fs", time.time() - t0)
+    timings["align_ms"] = int((time.time() - t0) * 1000)
+    log.info("align done in %.1fs", timings["align_ms"] / 1000)
 
     # Block 3: wav2vec2 + CTC forced alignment snaps each range's edges to
     # sub-50ms-accurate word boundaries. We pass split_internal_silence=False
@@ -263,5 +297,8 @@ def run_pipeline(video_path: str | Path) -> dict:
         result["clip"], video_path, dg_words,
         split_internal_silence=False,
     )
-    log.info("refine done in %.1fs", time.time() - t0)
+    timings["refine_ms"] = int((time.time() - t0) * 1000)
+    log.info("refine done in %.1fs", timings["refine_ms"] / 1000)
+
+    result["_timings"] = timings
     return result
