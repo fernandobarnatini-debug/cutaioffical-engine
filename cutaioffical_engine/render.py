@@ -154,11 +154,23 @@ def _padded_ranges(flat: list[dict[str, Any]]) -> list[tuple[float, float]]:
 
 
 def _build_filter_complex(ranges: list[tuple[float, float]]) -> str:
+    # `aresample=async=1` BEFORE atrim is the fix for iPhone pause-recorded
+    # .mov sources: when a user taps pause/resume during Camera capture, the
+    # resulting file has audio data that's shorter than the declared stream
+    # duration (audio capture pauses but video PTS keeps marching). Without
+    # this filter, atrim against PTS timestamps that fall past actual audio
+    # EOF silently truncates — the rendered cut ends up with N seconds of
+    # silent video at the tail because aconcat ran out of audio samples
+    # while video kept going. async=1 fills the gaps with silence so the
+    # audio PTS axis matches the video PTS axis exactly, and atrim sees the
+    # continuous, aligned stream it expects.
     parts: list[str] = []
     labels: list[str] = []
     for i, (s, e) in enumerate(ranges):
         parts.append(f"[0:v]trim=start={s}:end={e},setpts=PTS-STARTPTS[v{i}]")
-        parts.append(f"[0:a]atrim=start={s}:end={e},asetpts=PTS-STARTPTS[a{i}]")
+        parts.append(
+            f"[0:a]aresample=async=1,atrim=start={s}:end={e},asetpts=PTS-STARTPTS[a{i}]"
+        )
         labels.append(f"[v{i}][a{i}]")
     filtergraph = ";".join(parts)
     filtergraph += ";" + "".join(labels)
