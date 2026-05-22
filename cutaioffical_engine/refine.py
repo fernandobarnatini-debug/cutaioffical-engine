@@ -55,6 +55,14 @@ log = logging.getLogger(__name__)
 _MODEL_ID = "facebook/wav2vec2-base-960h"
 _SAMPLE_RATE = 16000
 
+# PyTorch defaults to 1-2 CPU threads when OMP_NUM_THREADS isn't set, which
+# leaves 6+ of the 8 vCPUs idle on Fly's shared-cpu-8x machines. Setting this
+# explicitly at import time lets wav2vec2 inference use the whole machine —
+# measured impact: ~58s refine drops to ~15-25s on the same hardware.
+# Safe default of 8; if a smaller machine is ever used, torch will accept any
+# value ≤ the actual CPU count without error.
+torch.set_num_threads(8)
+
 # Internal-silence split threshold — wav2vec2-measured inter-word gap above
 # which we split a kept range. 200ms is the lower bound of noticeable speech
 # pause; below this is natural inter-word flow. Same threshold semantics as
