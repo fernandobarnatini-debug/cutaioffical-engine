@@ -36,6 +36,7 @@ from __future__ import annotations
 
 import copy
 import logging
+import os
 import re
 import subprocess
 import tempfile
@@ -74,9 +75,43 @@ INTERNAL_SILENCE_SPLIT_S = 0.2
 # import the module — bad for cold-start latency on the worker.
 _model = None
 _processor = None
+_ort_session = None
+
+# Default-on env gate for the ONNX INT8 wav2vec2 path. Set
+# CUTAIOFFICAL_USE_ONNX_WAV2VEC2=0 to revert every worker to the slow PyTorch
+# path without a redeploy (kill switch for production rollback).
+_USE_ONNX = os.getenv("CUTAIOFFICAL_USE_ONNX_WAV2VEC2", "1") != "0"
+
+# INT8 ONNX file lives in the user's cache directory (~/.cache by default,
+# overridable via CUTAIOFFICAL_CACHE_DIR for containerized environments where
+# $HOME may not be writable). Lazy-downloaded from a GitHub release asset on
+# first use — the file is ~117MB, which exceeds GitHub's 100MB blob limit, so
+# we can't bundle it inside the wheel. The download is one-time per worker
+# lifetime; subsequent jobs hit the cached file directly. Mirrors how
+# HuggingFace fetches model weights to ~/.cache/huggingface on first use.
+_ONNX_VERSION = "v0.2.0-wav2vec2-onnx"
+_ONNX_FILENAME = "wav2vec2_base_960h.int8.onnx"
+_ONNX_EXPECTED_SHA256 = (
+    "0000000000000000000000000000000000000000000000000000000000000000"  # filled at release time
+)
+_ONNX_URL = (
+    f"https://github.com/fernandobarnatini-debug/cutaioffical-engine/"
+    f"releases/download/{_ONNX_VERSION}/{_ONNX_FILENAME}"
+)
+_CACHE_ROOT = Path(
+    os.getenv("CUTAIOFFICAL_CACHE_DIR")
+    or (Path.home() / ".cache" / "cutaioffical_engine")
+)
+_ONNX_PATH = _CACHE_ROOT / _ONNX_FILENAME
 
 
 def _load_model():
+    """Load the PyTorch wav2vec2 model + processor.
+
+    Always called: the processor handles audio normalization and the
+    tokenizer/vocab, which both paths need. The model itself is only used as
+    a fallback when the ONNX path is disabled or fails.
+    """
     global _model, _processor
     if _model is None:
         from transformers import Wav2Vec2ForCTC, Wav2Vec2Processor
@@ -85,6 +120,74 @@ def _load_model():
         _model = Wav2Vec2ForCTC.from_pretrained(_MODEL_ID)
         _model.eval()
     return _model, _processor
+
+
+def _load_processor_only():
+    """Load only the processor (tokenizer + audio normalizer).
+
+    Used by the ONNX path so we don't pay the ~360MB PyTorch model load on
+    every worker boot when the model itself never runs.
+    """
+    global _processor
+    if _processor is None:
+        from transformers import Wav2Vec2Processor
+
+        _processor = Wav2Vec2Processor.from_pretrained(_MODEL_ID)
+    return _processor
+
+
+def _ensure_onnx_file() -> bool:
+    """Make sure the INT8 ONNX file is present on disk; download if not.
+
+    Returns True if the file is ready, False if the download failed (in which
+    case the caller falls back to the PyTorch path).
+
+    Atomic write: download to a .partial path and rename on success. Avoids
+    leaving a half-written file that ORT would later refuse to load.
+    """
+    if _ONNX_PATH.exists() and _ONNX_PATH.stat().st_size > 1024 * 1024:
+        return True
+    try:
+        _CACHE_ROOT.mkdir(parents=True, exist_ok=True)
+        tmp = _ONNX_PATH.with_suffix(".partial")
+        log.info("refine: downloading ONNX INT8 model from %s", _ONNX_URL)
+        import urllib.request
+
+        with urllib.request.urlopen(_ONNX_URL, timeout=300) as r, open(tmp, "wb") as f:
+            while True:
+                chunk = r.read(1024 * 1024)
+                if not chunk:
+                    break
+                f.write(chunk)
+        tmp.rename(_ONNX_PATH)
+        log.info(
+            "refine: cached ONNX model at %s (%.1f MB)",
+            _ONNX_PATH, _ONNX_PATH.stat().st_size / 1024 / 1024,
+        )
+        return True
+    except Exception as e:
+        log.warning("refine: ONNX model download failed (%s); will use PyTorch path", e)
+        return False
+
+
+def _load_onnx_session():
+    """Load the ONNX Runtime session (lazy, singleton).
+
+    intra_op_num_threads=8 matches torch.set_num_threads(8) above and Fly's
+    shared-cpu-8x configuration. If the worker ever runs on a smaller box,
+    ORT silently caps at the actual core count.
+    """
+    global _ort_session
+    if _ort_session is None:
+        import onnxruntime as ort
+
+        opts = ort.SessionOptions()
+        opts.intra_op_num_threads = 8
+        _ort_session = ort.InferenceSession(
+            _ONNX_PATH.as_posix(), opts, providers=["CPUExecutionProvider"]
+        )
+        log.info("refine: loaded ONNX INT8 wav2vec2 session from %s", _ONNX_PATH.name)
+    return _ort_session
 
 
 def _normalize_token(w: str) -> str:
@@ -133,7 +236,11 @@ def _align_words(audio: np.ndarray, words: list[str]) -> list[tuple[float, float
     Returns one (start_s, end_s) tuple per input word, or None for words whose
     normalized form contained no in-vocab characters.
     """
-    model, processor = _load_model()
+    use_onnx = _USE_ONNX and _ensure_onnx_file()
+    if use_onnx:
+        processor = _load_processor_only()
+    else:
+        _, processor = _load_model()
     vocab = processor.tokenizer.get_vocab()
     blank_id = processor.tokenizer.pad_token_id
     delim_id = vocab[processor.tokenizer.word_delimiter_token]
@@ -166,9 +273,25 @@ def _align_words(audio: np.ndarray, words: list[str]) -> list[tuple[float, float
     input_values = processor(
         audio, sampling_rate=_SAMPLE_RATE, return_tensors="pt"
     ).input_values
-    with torch.inference_mode():
-        logits = model(input_values).logits  # (1, T, V)
-        emission = torch.log_softmax(logits, dim=-1)
+
+    # Forward pass — the expensive step that dominates Block 3's wall-clock.
+    # Try ONNX INT8 first when enabled; on any failure, fall back to the
+    # PyTorch FP32 path so a busted .onnx file or a runtime error degrades
+    # gracefully instead of breaking every job.
+    logits = None
+    if use_onnx:
+        try:
+            session = _load_onnx_session()
+            logits_np = session.run(None, {"input_values": input_values.numpy()})[0]
+            logits = torch.from_numpy(logits_np)
+        except Exception as e:
+            log.warning("refine: ONNX forward failed (%s); falling back to PyTorch", e)
+            logits = None
+    if logits is None:
+        model, _ = _load_model()
+        with torch.inference_mode():
+            logits = model(input_values).logits  # (1, T, V)
+    emission = torch.log_softmax(logits, dim=-1)
 
     targets = torch.tensor([target_ids], dtype=torch.int32)
     aligned, scores = taF.forced_align(emission, targets, blank=blank_id)

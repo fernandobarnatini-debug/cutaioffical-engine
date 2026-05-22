@@ -38,3 +38,14 @@ cuts_out/
 # Local dev helpers (user-specific paths)
 run_batch.sh
 run_one.sh
+
+# ONNX export artifacts — all live in cutaioffical_engine/data/ during
+# scripts/export_wav2vec2_onnx.py. None are committed: the INT8 file ships
+# as a GitHub release asset (too large for a git blob), the FP32 graphs
+# are 360MB throwaway intermediates.
+cutaioffical_engine/data/
+# Stray files that the ORT quantizer writes into the current working
+# directory (external-data shard + symbolic-shape inferencer scratch file).
+*.fp32.onnx.data
+sym_shape_infer_temp.onnx
+/[0-9a-f]*-[0-9a-f]*-[0-9a-f]*.data

@@ -14,6 +14,11 @@ dependencies = [
   "httpx>=0.27",
   "python-dotenv>=1.0",
   "openai>=1.40",
+  # ONNX Runtime for the INT8 wav2vec2 forward pass in refine.py. Optional at
+  # runtime — refine.py falls back to PyTorch if the ONNX path errors, and the
+  # CUTAIOFFICAL_USE_ONNX_WAV2VEC2=0 env switch disables it entirely — but the
+  # default-on path needs the package present.
+  "onnxruntime>=1.18",
 ]
 
 [project.scripts]
@@ -22,3 +27,9 @@ cutaioffical-engine = "cutaioffical_engine.__main__:main"
 [tool.setuptools.packages.find]
 include = ["cutaioffical_engine*"]
 exclude = ["tests*"]
+
+# The INT8 ONNX wav2vec2 model is NOT bundled in the wheel. At ~117MB it
+# exceeds GitHub's 100MB blob limit, and pip-install-from-git doesn't pull
+# Git LFS. Instead, refine._ensure_onnx_file() lazy-downloads it from a
+# GitHub release asset into ~/.cache/cutaioffical_engine/ on first use, the
+# same pattern HuggingFace uses for model weights.
