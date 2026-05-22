@@ -265,14 +265,21 @@ def run_pipeline(video_path: str | Path) -> dict:
     if not dg_key:
         raise RuntimeError("DEEPGRAM_API_KEY not set in env/.env")
 
+    # Keep the wav bytes resident outside the tempdir so block 3 can reuse
+    # them without re-running ffmpeg over the source video. The decoded PCM
+    # is small (16kHz mono = 32 KB/s, so ~3 MB per 90s clip) — well worth
+    # holding in memory to avoid the ~7s ffmpeg redo.
+    wav_bytes: bytes | None = None
     with tempfile.TemporaryDirectory(prefix="cutaioffical-") as tmpdir:
         wav_path = Path(tmpdir) / "audio.wav"
         t0 = time.time()
         extract_audio(video_path, wav_path)
         timings["extract_audio_ms"] = int((time.time() - t0) * 1000)
 
+        wav_bytes = wav_path.read_bytes()
+
         t0 = time.time()
-        deepgram = call_deepgram(wav_path.read_bytes(), dg_key)
+        deepgram = call_deepgram(wav_bytes, dg_key)
         timings["deepgram_ms"] = int((time.time() - t0) * 1000)
 
     # Sonnet (script cleanup) — measured by wrapping run_cleanup_from_deepgram
@@ -288,17 +295,27 @@ def run_pipeline(video_path: str | Path) -> dict:
     log.info("align done in %.1fs", timings["align_ms"] / 1000)
 
     # Block 3: wav2vec2 + CTC forced alignment snaps each range's edges to
-    # sub-50ms-accurate word boundaries. We pass split_internal_silence=False
-    # so internal pauses (natural breaths, mid-sentence beats) are PRESERVED
-    # in the rendered cut — this matches the locally-tested CLI behavior.
-    t0 = time.time()
-    dg_words = result["deepgram"]["results"]["channels"][0]["alternatives"][0]["words"]
-    result["clip"] = refine_ranges(
-        result["clip"], video_path, dg_words,
-        split_internal_silence=False,
+    # sub-50ms-accurate word boundaries. Set CUTAIOFFICAL_SKIP_REFINE=1 to
+    # bypass — the clip will use Deepgram's ±50-100ms boundaries and rely on
+    # render.py's hybrid padding (30/50/15ms) to absorb the imprecision.
+    # Skipping shaves ~58s off every job; quality trade-off is slightly
+    # looser cut edges. Toggle without redeploy via `fly secrets set/unset`.
+    skip_refine = os.getenv("CUTAIOFFICAL_SKIP_REFINE", "").strip().lower() in (
+        "1", "true", "yes", "on"
     )
-    timings["refine_ms"] = int((time.time() - t0) * 1000)
-    log.info("refine done in %.1fs", timings["refine_ms"] / 1000)
+    if skip_refine:
+        log.info("CUTAIOFFICAL_SKIP_REFINE set — skipping wav2vec2 refine")
+        timings["refine_ms"] = 0
+    else:
+        t0 = time.time()
+        dg_words = result["deepgram"]["results"]["channels"][0]["alternatives"][0]["words"]
+        result["clip"] = refine_ranges(
+            result["clip"], video_path, dg_words,
+            split_internal_silence=False,
+            preloaded_wav_bytes=wav_bytes,
+        )
+        timings["refine_ms"] = int((time.time() - t0) * 1000)
+        log.info("refine done in %.1fs", timings["refine_ms"] / 1000)
 
     result["_timings"] = timings
     return result

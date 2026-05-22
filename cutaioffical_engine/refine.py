@@ -275,6 +275,7 @@ def refine_ranges(
     dg_words: list[dict],
     split_internal_silence: bool = True,
     internal_silence_threshold_s: float | None = None,
+    preloaded_wav_bytes: bytes | None = None,
 ) -> dict:
     """Two-step range refinement:
 
@@ -320,7 +321,20 @@ def refine_ranges(
     else:
         threshold = float("inf")
 
-    audio = _extract_audio(Path(audio_path))
+    # If cleanup.run_pipeline already extracted the audio for Deepgram, it
+    # passes the WAV bytes through so we don't re-spawn ffmpeg over the
+    # source video (saves ~7s per job on typical 1080p clips).
+    if preloaded_wav_bytes is not None:
+        import io
+        audio, sr = sf.read(io.BytesIO(preloaded_wav_bytes), dtype="float32")
+        if sr != _SAMPLE_RATE:
+            raise RuntimeError(
+                f"preloaded wav sample rate {sr} != expected {_SAMPLE_RATE}"
+            )
+        if audio.ndim > 1:
+            audio = audio.mean(axis=1)
+    else:
+        audio = _extract_audio(Path(audio_path))
     norm_words = [_normalize_token(w.get("word", "")) for w in dg_words]
     timings = _align_words(audio, norm_words)
 

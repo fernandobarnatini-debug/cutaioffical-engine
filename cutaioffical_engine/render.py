@@ -12,6 +12,7 @@ Public API:
 """
 from __future__ import annotations
 
+import os
 import subprocess
 from pathlib import Path
 from typing import Any
@@ -35,16 +36,36 @@ RENDER_STYLE = "keoni_tight"
 #   PAD_FLOOR_MS   — minimum padding; 0 because wav2vec2 boundaries are precise.
 #   SHORT_CLIP_*   — wider window for short standalone utterances where there
 #                    is no surrounding rhythm to mask tight boundaries.
-PAD_FLOOR_MS = 0
 SHORT_CLIP_DURATION_S = 1.5
 
-if RENDER_STYLE == "keoni_tight":
+# When the wav2vec2 refine pass is skipped (CUTAIOFFICAL_SKIP_REFINE=1), edges
+# are only as precise as Deepgram (~±50-100ms). The "keoni_tight" 0/40 padding
+# would clip into word starts and chop tails. Use a hybrid profile that's
+# tighter than the pre-Block-3 60/120/25 default but loose enough to absorb
+# Deepgram's worst case. Same env var that gates refine flips the padding
+# here, so a single `fly secrets unset` reverts both behaviors atomically.
+_SKIP_REFINE = os.getenv("CUTAIOFFICAL_SKIP_REFINE", "").strip().lower() in (
+    "1", "true", "yes", "on"
+)
+
+if _SKIP_REFINE:
+    # Hybrid padding for the no-wav2vec2 path. 30ms head + 50ms tail covers
+    # Deepgram's typical imprecision; 15ms floor prevents the edges of even
+    # the shortest sub-ranges from chopping. Wider short-clip window because
+    # short standalone beats are the most exposed to boundary imprecision.
+    HEAD_TARGET_MS = 30
+    TAIL_TARGET_MS = 50
+    PAD_FLOOR_MS = 15
+    SHORT_CLIP_HEAD_MS = 60
+    SHORT_CLIP_TAIL_MS = 80
+elif RENDER_STYLE == "keoni_tight":
     # Affiliate-flow: cut at the end of the last syllable. Pairs with the
     # Keoni prompt's tighter span-break threshold to deliver zero noticeable
     # gap between cuts. Risk: voiced consonants ("s", "z", final vowels) may
     # truncate on some words — accepted tradeoff for flow per Keoni.
     HEAD_TARGET_MS = 0
     TAIL_TARGET_MS = 40
+    PAD_FLOOR_MS = 0
     SHORT_CLIP_HEAD_MS = 80
     SHORT_CLIP_TAIL_MS = 60
 else:
@@ -53,6 +74,7 @@ else:
     # verified by A/B listening test on the Henley count-reveal source.
     HEAD_TARGET_MS = 0
     TAIL_TARGET_MS = 120
+    PAD_FLOOR_MS = 0
     SHORT_CLIP_HEAD_MS = 120
     SHORT_CLIP_TAIL_MS = 150
 
