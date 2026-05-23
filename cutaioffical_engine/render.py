@@ -115,12 +115,14 @@ def _flatten_ranges(clip_json: dict[str, Any]) -> list[dict[str, Any]]:
     return flat
 
 
-def _padded_ranges(flat: list[dict[str, Any]]) -> list[tuple[float, float]]:
-    """Expand each range by head/tail padding, applying soft ceiling + hard cap.
+def _padded_ranges_with_meta(flat: list[dict[str, Any]]) -> list[dict[str, Any]]:
+    """Per-range padding result with head/tail pad amounts kept around.
 
-    Returns a list of (start_sec, end_sec) tuples ready for ffmpeg.
+    Returned dicts carry the padded video bounds AND the head_pad_ms /
+    tail_pad_ms actually applied, so callers like overlap_render() can compute
+    how much silence is *left* on each side after padding ate into it.
     """
-    out: list[tuple[float, float]] = []
+    out: list[dict[str, Any]] = []
     for i, r in enumerate(flat):
         head_hard_cap = float("inf")
         tail_hard_cap = float("inf")
@@ -146,11 +148,25 @@ def _padded_ranges(flat: list[dict[str, Any]]) -> list[tuple[float, float]]:
         tail_pad = max(PAD_FLOOR_MS, min(tail_target, r["post_silence_ms"]))
         tail_pad = max(0.0, min(tail_pad, tail_hard_cap))
 
-        out.append((
-            max(0.0, r["start"] - head_pad / 1000.0),
-            r["end"] + tail_pad / 1000.0,
-        ))
+        out.append({
+            "padded_start": max(0.0, r["start"] - head_pad / 1000.0),
+            "padded_end": r["end"] + tail_pad / 1000.0,
+            "head_pad_ms": head_pad,
+            "tail_pad_ms": tail_pad,
+            "pre_silence_ms": r["pre_silence_ms"],
+            "post_silence_ms": r["post_silence_ms"],
+            "raw_start": r["start"],
+            "raw_end": r["end"],
+        })
     return out
+
+
+def _padded_ranges(flat: list[dict[str, Any]]) -> list[tuple[float, float]]:
+    """Expand each range by head/tail padding, applying soft ceiling + hard cap.
+
+    Returns a list of (start_sec, end_sec) tuples ready for ffmpeg.
+    """
+    return [(m["padded_start"], m["padded_end"]) for m in _padded_ranges_with_meta(flat)]
 
 
 def _build_filter_complex(ranges: list[tuple[float, float]]) -> str:
