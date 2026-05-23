@@ -21,7 +21,7 @@ from .cleanup import (
 )
 from .clip import align
 from .render import compute_padded_ranges, render
-from .overlap import overlap_render
+from .overlap import compute_audio_ranges, overlap_render
 from .peaks import generate_peaks
 
 __all__ = [
@@ -31,6 +31,7 @@ __all__ = [
     "align",
     "render",
     "overlap_render",
+    "compute_audio_ranges",
     "compute_padded_ranges",
     "generate_peaks",
 ]

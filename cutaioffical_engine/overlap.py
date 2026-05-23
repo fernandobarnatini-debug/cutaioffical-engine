@@ -185,6 +185,54 @@ def _build_filter_complex(plan: list[dict[str, Any]]) -> str:
     return ";".join(parts)
 
 
+def compute_audio_ranges(
+    video_path: str | Path,
+    clip_json: dict[str, Any],
+    *,
+    max_overlap_ms: int = DEFAULT_MAX_OVERLAP_MS,
+    min_overlap_ms: int = DEFAULT_MIN_OVERLAP_MS,
+    neighbor_ratio: float = DEFAULT_NEIGHBOR_RATIO,
+) -> list[dict[str, float]]:
+    """Return the per-clip audio bounds the overlap render WOULD produce.
+
+    Same plan overlap_render() runs internally — exposed so the worker can
+    write it back onto clip_json["audio_ranges"] for the editor to draw the
+    waveform overhang past each clip's video boundary.
+
+    Each entry: {
+        "video_start": float, "video_end": float,     # padded video bounds
+        "audio_start": float, "audio_end": float,     # extended audio bounds
+        "back_ext": float,    "fwd_ext": float,       # debug: how far we bled
+    }
+
+    Returns empty list if clip_json has no valid ranges.
+    """
+    video_path = Path(video_path)
+    flat = _flatten_ranges(clip_json)
+    if not flat:
+        return []
+    padded = _padded_ranges_with_meta(flat)
+    source_duration = _probe_duration(video_path)
+    plan = _plan_overlap(
+        padded,
+        source_duration=source_duration,
+        max_overlap_ms=max_overlap_ms,
+        min_overlap_ms=min_overlap_ms,
+        neighbor_ratio=neighbor_ratio,
+    )
+    return [
+        {
+            "video_start": p["video_start"],
+            "video_end": p["video_end"],
+            "audio_start": p["audio_start"],
+            "audio_end": p["audio_end"],
+            "back_ext": p["back_ext"],
+            "fwd_ext": p["fwd_ext"],
+        }
+        for p in plan
+    ]
+
+
 def overlap_render(
     video_path: str | Path,
     clip_json: dict[str, Any],
