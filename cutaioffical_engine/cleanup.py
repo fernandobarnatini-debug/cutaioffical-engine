@@ -45,7 +45,31 @@ HTTP_TIMEOUT = httpx.Timeout(90.0, connect=15.0)
 LLM_TIMEOUT_SECONDS = 120.0
 
 OPENROUTER_BASE_URL = "https://openrouter.ai/api/v1"
-MODEL = "anthropic/claude-sonnet-4.5"
+# Cleanup model is env-driven so it can be swapped (and instantly reverted) via
+# a single secret — `CLEANUP_MODEL` — with no code redeploy. Defaults to the
+# locked Sonnet 4.5 production model; set e.g. "google/gemini-3.5-flash" to flip.
+MODEL = os.getenv("CLEANUP_MODEL", "anthropic/claude-sonnet-4.5").strip() or "anthropic/claude-sonnet-4.5"
+
+# Non-Anthropic models (e.g. Gemini) are unreliable with the strict json_schema
+# + verbose {kept_spans, removed_segments, notes} output — Gemini emits
+# malformed JSON ~40% of the time on it. For those models we keep the SAME
+# editing RULES (SYSTEM_PROMPT) but switch to a LEAN kept_spans-only output,
+# response_format=json_object, and a retry. The pipeline only consumes
+# kept_spans downstream; removed_segments/notes are debugging-only. The
+# Anthropic/Sonnet path below is left byte-for-byte unchanged.
+_LEAN_OUTPUT_OVERRIDE = (
+    "\n\n=== OUTPUT OVERRIDE ===\n"
+    "Ignore the OUTPUT FORMAT / removed_segments / notes instructions above. "
+    'Return ONLY this JSON object: {"kept_spans": ["verbatim contiguous '
+    'transcript chunk", "..."]} — each span copied EXACTLY from the transcript, '
+    "in final play order. Nothing else."
+)
+
+
+def _uses_lean_output(model: str) -> bool:
+    """Anthropic/Sonnet keeps the strict verbose schema; everything else (Gemini)
+    uses the lean kept_spans-only output + retry."""
+    return "anthropic" not in model.lower()
 
 PAUSE_MARKER_THRESHOLD = 0.3  # seconds; pauses ≥ this get an explicit marker for the AI.
 # 300ms is the physical boundary between natural inter-word gaps (30–150ms)
@@ -125,6 +149,9 @@ def structure_script(transcript: str, client: OpenAI) -> dict:
         "Raw transcript follows. Edit per the system rules and return the JSON object.\n\n"
         f"---\n{transcript}\n---"
     )
+    if _uses_lean_output(MODEL):
+        return _structure_script_lean(user_msg, client)
+    # --- Anthropic / Sonnet path: UNCHANGED from production ---
     t0 = time.time()
     response = client.chat.completions.create(
         model=MODEL,
@@ -151,6 +178,42 @@ def structure_script(transcript: str, client: OpenAI) -> dict:
     )
     log.info("sonnet done in %.1fs", time.time() - t0)
     return _parse_json(response.choices[0].message.content)
+
+
+def _structure_script_lean(user_msg: str, client: OpenAI) -> dict:
+    """Lean kept_spans-only path for non-Anthropic models (e.g. Gemini): same
+    editing RULES (SYSTEM_PROMPT), json_object output, retry once on unparseable
+    JSON. Returns a dict with kept_spans (+ empty removed_segments/notes for
+    shape parity). The strict verbose schema is unreliable for these models."""
+    last_err: Optional[Exception] = None
+    for attempt in range(2):
+        t0 = time.time()
+        response = client.chat.completions.create(
+            model=MODEL,
+            max_tokens=8000,
+            messages=[
+                {"role": "system", "content": SYSTEM_PROMPT + _LEAN_OUTPUT_OVERRIDE},
+                {"role": "user", "content": user_msg},
+            ],
+            response_format={"type": "json_object"},
+            extra_headers={
+                "HTTP-Referer": "https://github.com/local/cleanup",
+                "X-Title": "CleanUp",
+            },
+            timeout=LLM_TIMEOUT_SECONDS,
+        )
+        log.info("%s done in %.1fs (attempt %d)", MODEL, time.time() - t0, attempt + 1)
+        try:
+            data = _parse_json(response.choices[0].message.content)
+            if not isinstance(data, dict) or "kept_spans" not in data:
+                raise ValueError("cleanup response missing kept_spans")
+            data.setdefault("removed_segments", [])
+            data.setdefault("notes", "")
+            return data
+        except (json.JSONDecodeError, ValueError) as e:
+            last_err = e
+            log.warning("%s unparseable cleanup JSON (attempt %d): %s", MODEL, attempt + 1, e)
+    raise last_err  # type: ignore[misc]
 
 
 def _parse_json(content: str) -> dict:
